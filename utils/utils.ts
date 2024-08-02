@@ -42,7 +42,7 @@ const getRandomAvatar = () => {
     gestureProbability: 30,
     scale: 125,
   }
-
+  // @ts-ignore
   const generatedAvatar = createAvatar(avatar, styles)
 
   return generatedAvatar.toDataUri()
