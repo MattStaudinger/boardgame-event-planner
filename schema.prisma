@@ -9,9 +9,10 @@ datasource db {
 }
 
 model Event {
-    id           String   @id @default(cuid())
-    date         DateTime
-    participants User[]
+    id              String   @id @default(cuid())
+    date            DateTime
+    participants    User[]
+    maxParticipants Int      @default(4)
 }
 
 model User {
@@ -22,6 +23,6 @@ model User {
     canHost   Boolean  @default(false)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    dateId    String
-    date      Event    @relation(fields: [dateId], references: [id])
+    eventId   String
+    event     Event    @relation(fields: [eventId], references: [id])
 }
