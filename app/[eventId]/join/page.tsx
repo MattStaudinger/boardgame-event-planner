@@ -24,7 +24,7 @@ export default async function JoinEvent({ params }: EventProps) {
     <>
       <NavBackButton route={`/${event.id}`} />
 
-      <h1 className="text-custom-green text-2xl mt-12 font-bold">
+      <h1 className="text-custom-green text-2xl font-bold">
         Join on {dayjs(event.date).format("dddd, DD.MM.YYYY")}
       </h1>
       <div className="sm:px-2 px-6">

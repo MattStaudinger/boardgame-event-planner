@@ -20,7 +20,7 @@ export default async function Event({ params }: EventProps) {
   return (
     <>
       <NavBackButton route="/" />
-      <h1 className="text-custom-green text-2xl mt-12 font-bold">
+      <h1 className="text-custom-green text-2xl font-bold">
         {dayjs(event.date).format("ddd, DD.MM.YYYY")}
       </h1>
       <h2 className="text-black text-lg font-bold">Participants</h2>
