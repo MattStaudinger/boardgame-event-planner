@@ -91,18 +91,15 @@ export default function JoinEventForm({ event }: JoinEventFormProps) {
     <>
       <Fieldset className="w-full space-y-6 rounded-xl bg-white/5 ">
         <Field>
-          <Label className="text-sm/6 font-medium text-black/70">
+          <Label className="font-medium text-black/70">
             Name
             <span className="text-red-500 text-sm ml-[2px] align-top">*</span>
           </Label>
           <Input
             required
             onChange={handleChangeName}
-            // className={`mt-3 block w-full rounded-lg ${
-            //   validationErrors.name ? "border-red-500" : "border-none"
-            // } bg-black/10 p-3 text-sm/6 text-black/70 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25`}
             className={classnames(
-              "mt-3 block w-full rounded-lg bg-black/10 p-3 text-sm/6 text-black/70 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25",
+              "mt-3 block w-full rounded-lg bg-black/10 p-3 text-black/60 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25",
               {
                 "border-red-500 border-solid border-2": validationErrors.name,
               }
@@ -115,7 +112,7 @@ export default function JoinEventForm({ event }: JoinEventFormProps) {
           )}
         </Field>
         <Field>
-          <Label className="text-sm/6 font-medium text-black/70">
+          <Label className=" font-medium text-black/70">
             Email
             <span className="text-red-500 text-sm ml-[2px] align-top">*</span>
           </Label>
@@ -127,7 +124,7 @@ export default function JoinEventForm({ event }: JoinEventFormProps) {
             required
             onChange={handleChangeEmail}
             className={classnames(
-              "mt-3 block w-full rounded-lg bg-black/10 p-3 text-sm/6 text-black/70 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25",
+              "mt-3 block w-full rounded-lg bg-black/10 p-3 text-black/60 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25",
               {
                 "border-red-500 border-solid border-2": validationErrors.email,
               }
@@ -140,14 +137,14 @@ export default function JoinEventForm({ event }: JoinEventFormProps) {
           )}
         </Field>
         <Field>
-          <Label className="text-sm/6 font-medium text-black/70">Notes</Label>
+          <Label className="font-medium text-black/70">Notes</Label>
           <Description className="text-xs/6 text-black/50">
             You come later or bring cake? Let us know!
           </Description>
           <Textarea
             onChange={handleChangeNote}
             className={classnames(
-              "mt-3 block w-full resize-none rounded-lg bg-black/5 p-3 text-sm/6 text-black/70 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25",
+              "mt-3 block w-full resize-none rounded-lg bg-black/5 p-3 text-black/60 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25",
               {
                 "border-red-500 border-solid border-2": validationErrors.note,
               }
