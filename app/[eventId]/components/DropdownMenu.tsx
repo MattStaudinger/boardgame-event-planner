@@ -52,8 +52,8 @@ export default function DropdownMenu({ eventId }: DropdownMenuProps) {
                 href={`/join/${eventId}`}
                 className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/30"
               >
-                <MdModeEditOutline className="w-[16px] h-[16px]" />
-                <span>Edit</span>
+                <MdModeEditOutline className="w-[16px] h-[16px] text-white" />
+                <span className="text-white">Edit</span>
               </Link>
             </MenuItem>
             <div className="my-1 h-px bg-white/25" />
@@ -62,8 +62,8 @@ export default function DropdownMenu({ eventId }: DropdownMenuProps) {
                 onClick={openWarningModal}
                 className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/30"
               >
-                <MdCancel className="w-[16px] h-[16px]" />
-                <span>{"Can't make it"}</span>
+                <MdCancel className="w-[16px] h-[16px] text-white" />
+                <span className="text-white">{"Can't make it"}</span>
               </Button>
             </MenuItem>
           </>
