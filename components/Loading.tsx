@@ -6,7 +6,7 @@ export default async function Loading() {
     >
       <svg
         aria-hidden="true"
-        className="inline w-8 h-8 text-gray-100 animate-spin dark:text-custom-green fill-custom-text-custom-green dark:fill-gray-300"
+        className="inline w-8 h-8 animate-spin text-custom-green fill-gray-300"
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
