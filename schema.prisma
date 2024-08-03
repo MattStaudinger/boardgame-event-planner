@@ -25,4 +25,5 @@ model User {
     updatedAt DateTime @updatedAt
     eventId   String
     event     Event    @relation(fields: [eventId], references: [id])
+    hasCanceled     Boolean  @default(false)
 }

@@ -13,7 +13,6 @@ const getFutureEvents = () => {
   })
 }
 
-// sort the events by createdAt
 const getEvent = (id: string) => {
   return prisma.event.findUnique({
     where: {
@@ -21,6 +20,9 @@ const getEvent = (id: string) => {
     },
     include: {
       participants: {
+        where: {
+          hasCanceled: false, // Only include participants who have not canceled
+        },
         orderBy: {
           createdAt: "asc", // Use 'desc' for descending order
         },

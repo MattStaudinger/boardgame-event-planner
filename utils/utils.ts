@@ -1,5 +1,6 @@
 import { createAvatar } from "@dicebear/core"
 import { lorelei, croodles, notionists } from "@dicebear/collection"
+import { EventWithParticipants } from "../types/types"
 
 const getRandomAvatar = () => {
   const avatars = [lorelei, notionists, croodles]
@@ -48,4 +49,7 @@ const getRandomAvatar = () => {
   return generatedAvatar.toDataUri()
 }
 
-export { getRandomAvatar }
+const hasEventReachedMaxParticipants = (event: EventWithParticipants) =>
+  event.participants.length >= event.maxParticipants
+
+export { getRandomAvatar, hasEventReachedMaxParticipants }

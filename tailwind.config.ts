@@ -19,6 +19,7 @@ const config: Config = {
         "custom-yellow": "#FF9F1C",
         "custom-yellow-2": "#FFBF69",
         "custom-red": "#CC2936",
+        "custom-red-hover": "#f2303b",
       },
     },
   },

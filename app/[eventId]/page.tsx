@@ -2,6 +2,7 @@ import dayjs from "dayjs"
 import { getEvent } from "../api/server-api"
 import ParticipantItem from "./components/ParticipantItem"
 import Link from "next/link"
+import NavBackButton from "../../components/NavBackButton"
 
 type EventProps = {
   params: {
@@ -18,6 +19,7 @@ export default async function Event({ params }: EventProps) {
 
   return (
     <>
+      <NavBackButton route="/" />
       <h1 className="text-custom-green text-2xl mt-12 font-bold">
         {dayjs(event.date).format("ddd, DD.MM.YYYY")}
       </h1>
@@ -27,7 +29,11 @@ export default async function Event({ params }: EventProps) {
         {event.participants
           ?.slice(0, event.maxParticipants)
           .map((participant) => (
-            <ParticipantItem key={participant.id} participant={participant} />
+            <ParticipantItem
+              key={participant.id}
+              participant={participant}
+              eventId={event.id}
+            />
           ))}
       </ul>
       <Link
@@ -39,7 +45,7 @@ export default async function Event({ params }: EventProps) {
           : "Join the waiting list"}
       </Link>
 
-      <hr className="h-0.5 w-full border-t-0 bg-black dark:bg-black/10" />
+      <hr className="h-0.5 w-full border-t-0 bg-black/10" />
 
       <h2 className="text-black text-lg font-bold">Waiting list</h2>
 
@@ -47,7 +53,11 @@ export default async function Event({ params }: EventProps) {
         {event.participants
           ?.slice(event.maxParticipants, event.participants.length)
           .map((participant) => (
-            <ParticipantItem key={participant.id} participant={participant} />
+            <ParticipantItem
+              key={participant.id}
+              participant={participant}
+              eventId={event.id}
+            />
           ))}
       </ul>
     </>
