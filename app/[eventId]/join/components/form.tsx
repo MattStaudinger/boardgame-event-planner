@@ -14,6 +14,8 @@ import {
 import classnames from "classnames"
 import { hasEventReachedMaxParticipants } from "../../../../utils/utils"
 import { EventWithParticipants } from "../../../../types/types"
+import { createNewParticipant } from "../../../../utils/api"
+import { useRouter } from "next/navigation"
 
 type JoinEventFormProps = {
   event: EventWithParticipants
@@ -22,18 +24,19 @@ type JoinEventFormProps = {
 type ValidationErrors = {
   name?: string
   email?: string
-  notes?: string
+  note?: string
 }
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export default function JoinEventForm({ event }: JoinEventFormProps) {
+  const router = useRouter()
+
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
-  const [notes, setNotes] = useState("")
+  const [note, setNote] = useState("")
   const [canHost, setCanHost] = useState(false)
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({})
-  console.log("validationErrors: ", validationErrors)
 
   const validateForm = () => {
     const errors: ValidationErrors = {}
@@ -45,22 +48,30 @@ export default function JoinEventForm({ event }: JoinEventFormProps) {
     } else if (!emailRegex.test(email)) {
       errors.email = "Invalid email address"
     }
-    if (notes.length > 500) {
-      errors.notes = "Notes must be less than 500 characters"
+    if (note.length > 500) {
+      errors.note = "Notes must be less than 500 characters"
     }
 
     return errors
   }
 
-  const handleJoinEvent = () => {
-    console.log("name: ", name)
+  const handleJoinEvent = async () => {
     const errors = validateForm()
     setValidationErrors(errors)
     if (Object.keys(errors).length > 0) {
       return
     }
 
-    console.log("Joining event", name, email, notes, canHost)
+    await createNewParticipant({
+      name,
+      email,
+      note,
+      canHost,
+      eventId: event.id,
+    })
+    router.refresh()
+
+    router.push(`/${event.id}`)
   }
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value
@@ -70,9 +81,9 @@ export default function JoinEventForm({ event }: JoinEventFormProps) {
     const value = event.target.value
     setEmail(value)
   }
-  const handleChangeNotes = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChangeNote = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = event.target.value
-    setNotes(value)
+    setNote(value)
   }
   const isJoiningWaitingList = hasEventReachedMaxParticipants(event)
 
@@ -112,6 +123,7 @@ export default function JoinEventForm({ event }: JoinEventFormProps) {
             Used for sending out a reminder before the event
           </Description>
           <Input
+            type="email"
             required
             onChange={handleChangeEmail}
             className={classnames(
@@ -133,18 +145,18 @@ export default function JoinEventForm({ event }: JoinEventFormProps) {
             You come later or bring cake? Let us know!
           </Description>
           <Textarea
-            onChange={handleChangeNotes}
+            onChange={handleChangeNote}
             className={classnames(
               "mt-3 block w-full resize-none rounded-lg bg-black/5 p-3 text-sm/6 text-black/70 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25",
               {
-                "border-red-500 border-solid border-2": validationErrors.notes,
+                "border-red-500 border-solid border-2": validationErrors.note,
               }
             )}
             rows={3}
           />
-          {validationErrors.notes && (
+          {validationErrors.note && (
             <span className="text-red-500 text-xs/6">
-              {validationErrors.notes}
+              {validationErrors.note}
             </span>
           )}
         </Field>
