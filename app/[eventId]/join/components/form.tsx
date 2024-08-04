@@ -10,6 +10,10 @@ import {
   Textarea,
   Button,
   Checkbox,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  DialogBackdrop,
 } from "@headlessui/react"
 import classnames from "classnames"
 import { hasEventReachedMaxParticipants } from "../../../../utils/utils"
@@ -37,6 +41,8 @@ export default function JoinEventForm({ event }: JoinEventFormProps) {
   const [note, setNote] = useState("")
   const [canHost, setCanHost] = useState(false)
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({})
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
+  const [isRequestPending, setIsRequestPending] = useState(false)
 
   const validateForm = () => {
     const errors: ValidationErrors = {}
@@ -56,9 +62,11 @@ export default function JoinEventForm({ event }: JoinEventFormProps) {
   }
 
   const handleJoinEvent = async () => {
+    setIsRequestPending(true)
     const errors = validateForm()
     setValidationErrors(errors)
     if (Object.keys(errors).length > 0) {
+      setIsRequestPending(false)
       return
     }
 
@@ -69,10 +77,11 @@ export default function JoinEventForm({ event }: JoinEventFormProps) {
       canHost,
       eventId: event.id,
     })
-    router.refresh()
 
-    router.push(`/${event.id}`)
+    setIsRequestPending(false)
+    openSuccessModal()
   }
+
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value
     setName(value)
@@ -85,8 +94,21 @@ export default function JoinEventForm({ event }: JoinEventFormProps) {
     const value = event.target.value
     setNote(value)
   }
+
+  const openSuccessModal = () => {
+    setIsSuccessModalOpen(true)
+  }
+
+  const backToEventPage = () => {
+    router.refresh()
+    router.push(`/${event.id}`)
+  }
+
   const isJoiningWaitingList = hasEventReachedMaxParticipants(event)
 
+  const submitButtonLabel = isJoiningWaitingList
+    ? "Join the waiting list"
+    : "Join"
   return (
     <>
       <Fieldset className="w-full space-y-6 rounded-xl bg-white/5 ">
@@ -184,10 +206,54 @@ export default function JoinEventForm({ event }: JoinEventFormProps) {
 
       <Button
         onClick={handleJoinEvent}
-        className="rounded mt-[36px] w-full font-semibold mb-[16px] bg-custom-green py-2 px-8 text-md text-white data-[hover]:bg-custom-green-hover data-[active]:bg-custom-green-hover"
+        disabled={isRequestPending}
+        className="rounded mt-[36px]  w-full flex justify-center font-md font-semibold mb-[16px] bg-custom-green py-2 px-8 text-md text-white data-[hover]:bg-custom-green-hover data-[active]:bg-custom-green-hover"
       >
-        {isJoiningWaitingList ? "Join the waiting list" : "Join"}
+        {isRequestPending ? (
+          <>
+            <span className="animate-pulse">Joining...</span>{" "}
+          </>
+        ) : (
+          submitButtonLabel
+        )}
       </Button>
+
+      <Dialog
+        open={isSuccessModalOpen}
+        as="div"
+        className="relative z-10 focus:outline-none"
+        onClose={backToEventPage}
+      >
+        <DialogBackdrop className="fixed inset-0 bg-black/30" />
+        <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+          <div className="flex min-h-full items-center justify-center p-4">
+            <DialogPanel
+              transition
+              className="w-full max-w-md rounded-xl bg-white p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
+            >
+              <DialogTitle as="h3" className=" font-medium text-black text-xl">
+                Success! 🥳
+              </DialogTitle>
+              <p className="mt-2 text-sm/6 text-black/50">
+                {isJoiningWaitingList
+                  ? "You are now on the waiting list. We will send an email in case a spot becomes available."
+                  : "You joined the event"}
+              </p>
+              <p className="mt-2 text-sm/6 text-black/50">
+                Add the event to your calendar
+              </p>
+              <div className="mt-4 flex gap-[8px] ">
+                <Button
+                  className="rounded w-full my-[16px] bg-black/70 py-2 px-4 text-md text-white data-[hover]:bg-black/80 data-[active]:bg-black/80"
+                  onClick={backToEventPage}
+                >
+                  Back to event page
+                </Button>
+              </div>
+            </DialogPanel>
+          </div>
+        </div>
+      </Dialog>
     </>
   )
 }
