@@ -100,8 +100,8 @@ export default function JoinEventForm({ event }: JoinEventFormProps) {
   }
 
   const backToEventPage = () => {
-    router.refresh()
     router.push(`/${event.id}`)
+    router.refresh()
   }
 
   const isJoiningWaitingList = hasEventReachedMaxParticipants(event)
