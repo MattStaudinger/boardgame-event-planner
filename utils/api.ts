@@ -12,7 +12,6 @@ const createNewParticipant = async (userData: UserResponseBody) => {
   })
 
   if (res.ok) {
-    console.log("HERE")
     const data = res.json()
     return data
   }
