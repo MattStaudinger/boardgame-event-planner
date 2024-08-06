@@ -60,8 +60,7 @@ export default function JoinEventForm({ event }: JoinEventFormProps) {
 
     return errors
   }
-
-  const handleJoinEvent = async (e) => {
+  const handleJoinEvent = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsRequestPending(true)
     const errors = validateForm()
