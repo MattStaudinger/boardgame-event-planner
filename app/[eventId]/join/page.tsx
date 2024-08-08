@@ -22,7 +22,7 @@ export default async function JoinEvent({ params }: EventProps) {
 
   return (
     <>
-      <NavBackButton route={`/${event.id}`} />
+      <NavBackButton route={`/${event.id}`} label="Back" />
 
       <h1 className="text-custom-green text-2xl font-bold">
         Join on {dayjs(event.date).format("dddd, DD.MM.YYYY")}
@@ -40,7 +40,7 @@ export default async function JoinEvent({ params }: EventProps) {
           href={`/${event.id}`}
           className="rounded flex  justify-center font-semibold w-full bg-black/30 py-2 px-8 text-md text-white data-[hover]:bg-custom-green-hover data-[active]:bg-custom-green-hover"
         >
-          Back
+          Cancel
         </Link>
       </div>
     </>
