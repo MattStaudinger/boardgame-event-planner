@@ -20,6 +20,8 @@ import { hasEventReachedMaxParticipants } from "../../../../utils/utils"
 import { EventWithParticipants } from "../../../../types/types"
 import { createNewParticipant } from "../../../../utils/api"
 import { useRouter } from "next/navigation"
+import { AddToCalendarButton } from "add-to-calendar-button-react"
+import dayjs from "dayjs"
 
 type JoinEventFormProps = {
   event: EventWithParticipants
@@ -119,7 +121,6 @@ export default function JoinEventForm({ event }: JoinEventFormProps) {
               <span className="text-red-500 text-sm ml-[2px] align-top">*</span>
             </Label>
             <Input
-              required
               onChange={handleChangeName}
               className={classnames(
                 "mt-3 block w-full rounded-lg bg-black/10 p-3 text-black/60 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25",
@@ -144,7 +145,6 @@ export default function JoinEventForm({ event }: JoinEventFormProps) {
             </Description>
             <Input
               type="email"
-              required
               onChange={handleChangeEmail}
               className={classnames(
                 "mt-3 block w-full rounded-lg bg-black/10 p-3 text-black/60 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25",
@@ -231,27 +231,37 @@ export default function JoinEventForm({ event }: JoinEventFormProps) {
           <div className="flex min-h-full items-center justify-center p-4">
             <DialogPanel
               transition
-              className="w-full max-w-md rounded-xl bg-white p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
+              className="flex flex-col gap-[16px] w-full max-w-md rounded-xl bg-white p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
             >
               <DialogTitle as="h3" className=" font-medium text-black text-xl">
                 Success! 🥳
               </DialogTitle>
-              <p className="mt-2 text-sm/6 text-black/50">
+              <p className="text-sm/6 text-black/50">
                 {isJoiningWaitingList
                   ? "You are now on the waiting list. We will send an email in case a spot becomes available."
                   : "You joined the event"}
               </p>
-              <p className="mt-2 text-sm/6 text-black/50">
-                Add the event to your calendar
-              </p>
-              <div className="mt-4 flex gap-[8px] ">
-                <Button
-                  className="rounded w-full my-[16px] bg-black/70 py-2 px-4 text-md text-white data-[hover]:bg-black/80 data-[active]:bg-black/80"
-                  onClick={backToEventPage}
-                >
-                  Back to event page
-                </Button>
-              </div>
+
+              <AddToCalendarButton
+                name="Boardgame night!"
+                description="The boardgame night you never forget! The location will be announced some days prior the event."
+                startDate={dayjs(event.date).format("YYYY-MM-DD")}
+                startTime={dayjs(event.date).format("HH:mm")}
+                endTime={dayjs(event.date).add(4, "hour").format("HH:mm")}
+                timeZone="Europe/Berlin"
+                location="Berlin"
+                options="'Apple','Google','iCal','Outlook.com','Yahoo','Microsoft365','MicrosoftTeams'"
+                trigger="click"
+                hideBackground
+                lightMode="light"
+                hideCheckmark
+              />
+              <Button
+                className="rounded w-full my-[16px] bg-black/70 py-2 px-4 text-md text-white data-[hover]:bg-black/80 data-[active]:bg-black/80"
+                onClick={backToEventPage}
+              >
+                Back to event page
+              </Button>
             </DialogPanel>
           </div>
         </div>
