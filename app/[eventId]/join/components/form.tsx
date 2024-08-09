@@ -12,6 +12,7 @@ import {
 import classnames from "classnames"
 import { useRouter } from "next/navigation"
 import { useFormState } from "react-dom"
+import type { User } from "@prisma/client"
 
 import { hasEventReachedMaxParticipants } from "../../../../utils/utils"
 import { EventWithParticipants } from "../../../../types/types"
@@ -21,6 +22,9 @@ import SubmitButton from "./SubmitButton"
 
 type JoinEventFormProps = {
   event: EventWithParticipants
+  participant?: User
+  isOnWaitingList: boolean
+  isEdit?: boolean
 }
 
 const initialState = {
@@ -29,7 +33,12 @@ const initialState = {
   success: false,
 }
 
-export default function JoinEventForm({ event }: JoinEventFormProps) {
+export default function JoinEventForm({
+  event,
+  participant,
+  isOnWaitingList,
+  isEdit,
+}: JoinEventFormProps) {
   const router = useRouter()
 
   const [formState, formAction] = useFormState(
@@ -44,8 +53,6 @@ export default function JoinEventForm({ event }: JoinEventFormProps) {
     // trigger the success modal
     router.refresh()
   }
-
-  const isJoiningWaitingList = hasEventReachedMaxParticipants(event)
 
   return (
     <>
@@ -65,6 +72,7 @@ export default function JoinEventForm({ event }: JoinEventFormProps) {
                     formState.errors?.name,
                 }
               )}
+              defaultValue={participant?.name}
             />
             <div id="customer-error" aria-live="polite" aria-atomic="true">
               {formState.errors?.name && (
@@ -92,6 +100,7 @@ export default function JoinEventForm({ event }: JoinEventFormProps) {
                     formState.errors?.email,
                 }
               )}
+              defaultValue={participant?.email}
             />
             <div id="customer-error" aria-live="polite" aria-atomic="true">
               {formState.errors?.email && (
@@ -116,6 +125,7 @@ export default function JoinEventForm({ event }: JoinEventFormProps) {
                 }
               )}
               rows={3}
+              defaultValue={participant?.note}
             />
             <div id="customer-error" aria-live="polite" aria-atomic="true">
               {formState.errors?.note && (
@@ -128,6 +138,7 @@ export default function JoinEventForm({ event }: JoinEventFormProps) {
           <Field className="flex items-center gap-[16px] cursor-pointer">
             <Checkbox
               name="canHost"
+              defaultChecked={!!participant?.canHost}
               value="true"
               className="group size-7 rounded-md bg-black/10 p-1 ring-1 ring-black/10 ring-inset data-[checked]:bg-custom-green"
             >
@@ -150,8 +161,9 @@ export default function JoinEventForm({ event }: JoinEventFormProps) {
           </Field>
         </Fieldset>
         <Input type="hidden" name="eventId" value={event.id} />
+        <Input type="hidden" name="participantId" value={participant?.id} />
 
-        <SubmitButton isJoiningWaitingList={isJoiningWaitingList} />
+        <SubmitButton isOnWaitingList={isOnWaitingList} isEdit={isEdit} />
         <p aria-live="polite" className="sr-only" role="status">
           {formState?.message}
         </p>
@@ -161,7 +173,8 @@ export default function JoinEventForm({ event }: JoinEventFormProps) {
         event={event}
         isSuccessModalOpen={formState.success}
         backToEventPage={backToEventPage}
-        isJoiningWaitingList={isJoiningWaitingList}
+        isOnWaitingList={isOnWaitingList}
+        isEdit={isEdit}
       />
     </>
   )

@@ -4,15 +4,27 @@ import { useFormStatus } from "react-dom"
 import { Button } from "@headlessui/react"
 
 type SubmitButtonProps = {
-  isJoiningWaitingList: boolean
+  isOnWaitingList: boolean
+  isEdit?: boolean
 }
 
-const SubmitButton = ({ isJoiningWaitingList }: SubmitButtonProps) => {
+const getSubmitButtonMessage = ({
+  isOnWaitingList,
+  isEdit,
+}: SubmitButtonProps) => {
+  if (isEdit) {
+    return "Update"
+  }
+  return isOnWaitingList ? "Join the waiting list" : "Join"
+}
+
+const SubmitButton = ({ isOnWaitingList, isEdit }: SubmitButtonProps) => {
   const { pending } = useFormStatus()
 
-  const submitButtonLabel = isJoiningWaitingList
-    ? "Join the waiting list"
-    : "Join"
+  const submitButtonMessage = getSubmitButtonMessage({
+    isOnWaitingList,
+    isEdit,
+  })
 
   return (
     <Button
@@ -23,10 +35,12 @@ const SubmitButton = ({ isJoiningWaitingList }: SubmitButtonProps) => {
     >
       {pending ? (
         <>
-          <span className="animate-pulse">Joining...</span>{" "}
+          <span className="animate-pulse">
+            {isEdit ? "Updating..." : "Joining..."}
+          </span>{" "}
         </>
       ) : (
-        submitButtonLabel
+        submitButtonMessage
       )}
     </Button>
   )

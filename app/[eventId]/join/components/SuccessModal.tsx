@@ -15,14 +15,31 @@ type JoinEventFormProps = {
   event: EventWithParticipants
   isSuccessModalOpen: boolean
   backToEventPage: () => void
-  isJoiningWaitingList: boolean
+  isOnWaitingList: boolean
+  isEdit?: boolean
+}
+
+const getSuccessMessage = ({
+  isOnWaitingList,
+  isEdit,
+}: {
+  isOnWaitingList: boolean
+  isEdit?: boolean
+}) => {
+  if (isEdit) {
+    return "You updated your info"
+  }
+  return isOnWaitingList
+    ? "You are now on the waiting list. We will send an email in case a spot becomes available."
+    : "You joined the event"
 }
 
 export default function JoinEventForm({
   event,
   isSuccessModalOpen,
   backToEventPage,
-  isJoiningWaitingList,
+  isOnWaitingList,
+  isEdit,
 }: JoinEventFormProps) {
   return (
     <Dialog
@@ -42,9 +59,7 @@ export default function JoinEventForm({
               Success! 🥳
             </DialogTitle>
             <p className="text-sm/6 text-black/50">
-              {isJoiningWaitingList
-                ? "You are now on the waiting list. We will send an email in case a spot becomes available."
-                : "You joined the event"}
+              {getSuccessMessage({ isOnWaitingList, isEdit })}
             </p>
 
             <AddToCalendarButton

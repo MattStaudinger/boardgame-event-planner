@@ -18,9 +18,13 @@ import Link from "next/link"
 
 type DropdownMenuProps = {
   eventId: string
+  participantId: string
 }
 
-export default function DropdownMenu({ eventId }: DropdownMenuProps) {
+export default function DropdownMenu({
+  eventId,
+  participantId,
+}: DropdownMenuProps) {
   const [isWarningModalOpen, setIsWarningModalOpen] = useState(false)
 
   const openWarningModal = () => {
@@ -49,7 +53,7 @@ export default function DropdownMenu({ eventId }: DropdownMenuProps) {
           <>
             <MenuItem>
               <Link
-                href={`/join/${eventId}`}
+                href={`${eventId}/join/${participantId}`}
                 className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/30"
               >
                 <MdModeEditOutline className="w-[16px] h-[16px] text-white" />

@@ -18,7 +18,7 @@ export default async function JoinEvent({ params }: EventProps) {
   if (!event) {
     return <div>Event not found</div>
   }
-  const isJoiningWaitingList = hasEventReachedMaxParticipants(event)
+  const isOnWaitingList = hasEventReachedMaxParticipants(event)
 
   return (
     <>
@@ -27,14 +27,14 @@ export default async function JoinEvent({ params }: EventProps) {
       <h1 className="text-custom-green text-2xl font-bold">
         Join on {dayjs(event.date).format("dddd, DD.MM.YYYY")}
       </h1>
-      <div className="sm:px-2 px-6">
-        {isJoiningWaitingList && (
+      <div className="sm:px-2 px-6 w-full">
+        {isOnWaitingList && (
           <p className="text-sm/6 text-black/50 mb-[16px]">
             The event is already full... You are joining the waiting list and
             will be notified via email if a spot becomes available.
           </p>
         )}
-        <Form event={event} />
+        <Form event={event} isOnWaitingList={isOnWaitingList} />
 
         <Link
           href={`/${event.id}`}

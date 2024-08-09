@@ -1,6 +1,7 @@
 import { createAvatar } from "@dicebear/core"
 import { lorelei, croodles, notionists } from "@dicebear/collection"
 import { EventWithParticipants } from "../types/types"
+import type { User } from "@prisma/client"
 
 const getRandomAvatar = () => {
   const avatars = [lorelei, notionists, croodles]
@@ -52,4 +53,21 @@ const getRandomAvatar = () => {
 const hasEventReachedMaxParticipants = (event: EventWithParticipants) =>
   event.participants.length >= event.maxParticipants
 
-export { getRandomAvatar, hasEventReachedMaxParticipants }
+const isParticipantOnWaitingList = (
+  event: EventWithParticipants,
+  selectedParticipant: User
+) => {
+  // in case a user edits its data, we need to check if the user is part of the waiting list or in the event
+  const isParticipantAboveTheWaitingList =
+    event.participants.findIndex(
+      (participant) => participant.id === selectedParticipant?.id
+    ) < event.maxParticipants
+
+  return !isParticipantAboveTheWaitingList
+}
+
+export {
+  getRandomAvatar,
+  hasEventReachedMaxParticipants,
+  isParticipantOnWaitingList,
+}

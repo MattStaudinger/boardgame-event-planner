@@ -1,9 +1,9 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
 import { z } from "zod"
 import { prisma } from "../utils/db"
 import { UserResponseBody } from "../types/types"
+import ParticipantItem from "./[eventId]/components/ParticipantItem"
 
 export type State = {
   errors?: {
@@ -25,6 +25,7 @@ export async function createNewParticipant(
     note: z.string().max(500),
     canHost: z.boolean(),
     eventId: z.string(),
+    id: z.string().optional(),
   })
 
   const data = Object.fromEntries(formData.entries())
@@ -39,6 +40,7 @@ export async function createNewParticipant(
     note: data.note,
     canHost: canHost,
     eventId: data.eventId,
+    id: data.participantId,
   })
 
   if (!validatedData.success) {
@@ -52,9 +54,21 @@ export async function createNewParticipant(
   const body: UserResponseBody = validatedData.data
 
   try {
-    await prisma.user.create({
-      data: body,
-    })
+    // edit user
+    if (body.id) {
+      await prisma.user.update({
+        where: {
+          id: body.id,
+        },
+        data: body,
+      })
+
+      // create user
+    } else {
+      await prisma.user.create({
+        data: body,
+      })
+    }
 
     // When nextJs gets updated, we will call in the future revalidatePath(`/${body.eventId}`) - currently,
     // revalidatePath invalidates all the routes in the client-side Router Cache and hence wouldn't

@@ -34,7 +34,7 @@ export default async function ParticipantItem({
         </div>
       </div>
 
-      <DropdownMenu eventId={eventId} />
+      <DropdownMenu eventId={eventId} participantId={participant.id} />
     </li>
   )
 }
