@@ -2,9 +2,17 @@ import type { Event, User } from "@prisma/client"
 
 type EventWithParticipants = Event & { participants: User[] }
 
-type UserResponseBody = Omit<
+type CreateParticipantBody = Omit<
   User,
   "id" | "createdAt" | "updatedAt" | "hasCanceled"
-> & { id?: string }
+>
+type UpdateParticipantBody = Omit<
+  User,
+  "createdAt" | "updatedAt" | "hasCanceled"
+>
 
-export type { EventWithParticipants, UserResponseBody }
+export type {
+  EventWithParticipants,
+  CreateParticipantBody,
+  UpdateParticipantBody,
+}

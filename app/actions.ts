@@ -1,12 +1,16 @@
 "use server"
 
 import { z } from "zod"
-import { prisma } from "../utils/db"
 import { revalidatePath } from "next/cache"
 import type { User } from "@prisma/client"
 
-import { UserResponseBody } from "../types/types"
+import { CreateParticipantBody, UpdateParticipantBody } from "../types/types"
 import { redirect } from "next/navigation"
+import {
+  createParticipant,
+  updateParticipant as updateParticipantInDB,
+  deleteParticipant as deleteParticipantInDB,
+} from "../utils/server-api"
 
 export type State = {
   errors?: {
@@ -57,13 +61,11 @@ export async function createNewParticipant(
     }
   }
 
-  const body: UserResponseBody = validatedData.data
+  const body: CreateParticipantBody = validatedData.data
 
   try {
     // create user
-    await prisma.user.create({
-      data: body,
-    })
+    await createParticipant(body)
 
     // When nextJs gets updated, we will call in the future revalidatePath(`/${body.eventId}`) - currently,
     // revalidatePath invalidates all the routes in the client-side Router Cache and hence wouldn't
@@ -104,15 +106,10 @@ export async function updateParticipant(prevState: State, formData: FormData) {
     }
   }
 
-  const body: UserResponseBody = validatedData.data
+  const body: UpdateParticipantBody = validatedData.data
 
   try {
-    await prisma.user.update({
-      where: {
-        id: body.id,
-      },
-      data: body,
-    })
+    await updateParticipantInDB(body)
 
     revalidatePath(`/${body.eventId}`)
   } catch (error) {
@@ -133,12 +130,7 @@ export async function deleteParticipant({
   eventId: string
 }) {
   try {
-    await prisma.user.update({
-      where: {
-        id: participant.id,
-      },
-      data: { ...participant, hasCanceled: true },
-    })
+    await deleteParticipantInDB(participant)
 
     revalidatePath(`/${eventId}`)
   } catch (error) {

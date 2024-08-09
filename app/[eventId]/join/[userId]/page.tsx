@@ -1,7 +1,7 @@
 import dayjs from "dayjs"
 import Link from "next/link"
 
-import { getEvent } from "../../../api/server-api"
+import { getEvent } from "../../../../utils/server-api"
 import Form from "../components/form"
 import NavBackButton from "../../../../components/NavBackButton"
 import { isParticipantOnWaitingList } from "../../../../utils/utils"

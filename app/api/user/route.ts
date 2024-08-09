@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server"
-import { UserResponseBody } from "../../../types/types"
+import { CreateParticipantBody } from "../../../types/types"
 import { prisma } from "../../../utils/db"
 import { revalidatePath } from "next/cache"
 
 export const POST = async (request: Request) => {
   try {
-    const body: UserResponseBody = await request.json()
+    const body: CreateParticipantBody = await request.json()
 
     await prisma.user.create({
       data: {

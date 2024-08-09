@@ -2,7 +2,7 @@ import Link from "next/link"
 import dayjs from "dayjs"
 import "dayjs/locale/de"
 
-import { getFutureEvents } from "./api/server-api"
+import { getFutureEvents } from "../utils/server-api"
 import TextBox from "../components/TextBox"
 
 export default async function Home() {

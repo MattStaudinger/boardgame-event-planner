@@ -1,5 +1,5 @@
 import dayjs from "dayjs"
-import { getEvent } from "../api/server-api"
+import { getEvent } from "../../utils/server-api"
 import ParticipantItem from "./components/ParticipantItem"
 import Link from "next/link"
 import NavBackButton from "../../components/NavBackButton"
