@@ -10,30 +10,20 @@ import {
   Textarea,
   Button,
   Checkbox,
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-  DialogBackdrop,
 } from "@headlessui/react"
 import classnames from "classnames"
+import { useRouter } from "next/navigation"
+
 import { hasEventReachedMaxParticipants } from "../../../../utils/utils"
 import { EventWithParticipants } from "../../../../types/types"
 import { createNewParticipant } from "../../../../utils/api"
-import { useRouter } from "next/navigation"
-import { AddToCalendarButton } from "add-to-calendar-button-react"
-import dayjs from "dayjs"
+import SuccessModal from "./SuccessModal"
+import { FormValidationErrors } from "../../../../types/types"
+import { validateForm } from "../utils"
 
 type JoinEventFormProps = {
   event: EventWithParticipants
 }
-
-type ValidationErrors = {
-  name?: string
-  email?: string
-  note?: string
-}
-
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export default function JoinEventForm({ event }: JoinEventFormProps) {
   const router = useRouter()
@@ -42,30 +32,15 @@ export default function JoinEventForm({ event }: JoinEventFormProps) {
   const [email, setEmail] = useState("")
   const [note, setNote] = useState("")
   const [canHost, setCanHost] = useState(false)
-  const [validationErrors, setValidationErrors] = useState<ValidationErrors>({})
+  const [validationErrors, setValidationErrors] =
+    useState<FormValidationErrors>({})
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
   const [isRequestPending, setIsRequestPending] = useState(false)
 
-  const validateForm = () => {
-    const errors: ValidationErrors = {}
-    if (!name) {
-      errors.name = "Your Name is required"
-    }
-    if (!email) {
-      errors.email = "Your Email is required"
-    } else if (!emailRegex.test(email)) {
-      errors.email = "Invalid email address"
-    }
-    if (note.length > 500) {
-      errors.note = "Notes must be less than 500 characters"
-    }
-
-    return errors
-  }
   const handleJoinEvent = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsRequestPending(true)
-    const errors = validateForm()
+    const errors = validateForm({ email, name, note })
     setValidationErrors(errors)
     if (Object.keys(errors).length > 0) {
       setIsRequestPending(false)
@@ -220,52 +195,12 @@ export default function JoinEventForm({ event }: JoinEventFormProps) {
         </Button>
       </form>
 
-      <Dialog
-        open={isSuccessModalOpen}
-        as="div"
-        className="relative z-10 focus:outline-none"
-        onClose={backToEventPage}
-      >
-        <DialogBackdrop className="fixed inset-0 bg-black/30" />
-        <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4">
-            <DialogPanel
-              transition
-              className="flex flex-col gap-[16px] w-full max-w-md rounded-xl bg-white p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
-            >
-              <DialogTitle as="h3" className=" font-medium text-black text-xl">
-                Success! 🥳
-              </DialogTitle>
-              <p className="text-sm/6 text-black/50">
-                {isJoiningWaitingList
-                  ? "You are now on the waiting list. We will send an email in case a spot becomes available."
-                  : "You joined the event"}
-              </p>
-
-              <AddToCalendarButton
-                name="Boardgame night!"
-                description="The boardgame night you never forget! The location will be announced some days prior the event."
-                startDate={dayjs(event.date).format("YYYY-MM-DD")}
-                startTime={dayjs(event.date).format("HH:mm")}
-                endTime={dayjs(event.date).add(4, "hour").format("HH:mm")}
-                timeZone="Europe/Berlin"
-                location="Berlin"
-                options="'Apple','Google','iCal','Outlook.com','Yahoo','Microsoft365','MicrosoftTeams'"
-                trigger="click"
-                hideBackground
-                lightMode="light"
-                hideCheckmark
-              />
-              <Button
-                className="rounded w-full my-[16px] bg-black/70 py-2 px-4 text-md text-white data-[hover]:bg-black/80 data-[active]:bg-black/80"
-                onClick={backToEventPage}
-              >
-                Back to event page
-              </Button>
-            </DialogPanel>
-          </div>
-        </div>
-      </Dialog>
+      <SuccessModal
+        event={event}
+        isSuccessModalOpen={isSuccessModalOpen}
+        backToEventPage={backToEventPage}
+        isJoiningWaitingList={isJoiningWaitingList}
+      />
     </>
   )
 }

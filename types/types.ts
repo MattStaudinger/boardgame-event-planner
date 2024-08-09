@@ -7,4 +7,10 @@ type UserResponseBody = Omit<
   "id" | "createdAt" | "updatedAt" | "hasCanceled"
 >
 
-export type { EventWithParticipants, UserResponseBody }
+type FormValidationErrors = {
+  name?: string
+  email?: string
+  note?: string
+}
+
+export type { EventWithParticipants, UserResponseBody, FormValidationErrors }
