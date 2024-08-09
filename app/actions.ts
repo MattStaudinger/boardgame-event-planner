@@ -18,12 +18,12 @@ export type State = {
     email?: string[]
     note?: string[]
   }
-  message?: string | null
-  success?: boolean
+  message: string
+  success: boolean
 }
 
 const FormSchema = z.object({
-  name: z.string(),
+  name: z.string().min(1, { message: "This field is required" }),
   email: z.string().email(),
   note: z.string().max(500),
   canHost: z.boolean(),
@@ -50,7 +50,6 @@ export async function createNewParticipant(
     note: data.note,
     canHost: canHost,
     eventId: data.eventId,
-    id: data.participantId,
   })
 
   if (!validatedData.success) {
@@ -76,7 +75,7 @@ export async function createNewParticipant(
     console.log("error: ", error)
     // Return a NextResponse object with an error message and status code
     return {
-      message: "Database error. Failed to add participant",
+      message: "There was a problem. Please try again",
       success: false,
     }
   }
@@ -116,7 +115,7 @@ export async function updateParticipant(prevState: State, formData: FormData) {
     console.log("error: ", error)
     // Return a NextResponse object with an error message and status code
     return {
-      message: "Database error. Failed to update participant",
+      message: "There was a problem. Please try again",
       success: false,
     }
   }

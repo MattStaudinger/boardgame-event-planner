@@ -14,9 +14,8 @@ import { useRouter } from "next/navigation"
 import { useFormState } from "react-dom"
 import type { User } from "@prisma/client"
 
-import { hasEventReachedMaxParticipants } from "../../../../utils/utils"
 import { EventWithParticipants } from "../../../../types/types"
-import { createNewParticipant } from "../../../actions"
+import { createNewParticipant, State } from "../../../actions"
 import SuccessModal from "./SuccessModal"
 import SubmitButton from "./SubmitButton"
 
@@ -27,9 +26,9 @@ type JoinEventFormProps = {
   isEdit?: boolean
 }
 
-const initialState = {
+const initialState: State = {
   message: "",
-  error: {},
+  errors: {},
   success: false,
 }
 
@@ -164,9 +163,13 @@ export default function JoinEventForm({
         <Input type="hidden" name="participantId" value={participant?.id} />
 
         <SubmitButton isOnWaitingList={isOnWaitingList} isEdit={isEdit} />
-        <p aria-live="polite" className="sr-only" role="status">
-          {formState?.message}
-        </p>
+        <div id="customer-error" aria-live="polite" aria-atomic="true">
+          {!formState.success && !formState.errors && (
+            <div className="text-red-500 text-sm/6 mb-[16px] text-center">
+              {formState.message}
+            </div>
+          )}
+        </div>
       </form>
 
       <SuccessModal

@@ -1,37 +1,49 @@
 import dayjs from "dayjs"
 import { prisma } from "./db"
+import { redirect } from "next/navigation"
 
 import { CreateParticipantBody, UpdateParticipantBody } from "../types/types"
 import type { User } from "@prisma/client"
 
-const getFutureEvents = () => {
+const getFutureEvents = async () => {
   const today = dayjs().format()
-
-  return prisma.event.findMany({
-    where: {
-      date: {
-        gte: today,
+  try {
+    const res = await prisma.event.findMany({
+      where: {
+        date: {
+          gte: today,
+        },
       },
-    },
-  })
+    })
+    return res
+  } catch (error) {
+    console.error(error)
+    redirect("/error")
+  }
 }
 
-const getEvent = (id: string) => {
-  return prisma.event.findUnique({
-    where: {
-      id,
-    },
-    include: {
-      participants: {
-        where: {
-          hasCanceled: false, // Only include participants who have not canceled
-        },
-        orderBy: {
-          createdAt: "asc", // Use 'desc' for descending order
+const getEvent = async (id: string) => {
+  try {
+    const res = await prisma.event.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        participants: {
+          where: {
+            hasCanceled: false, // Only include participants who have not canceled
+          },
+          orderBy: {
+            createdAt: "asc", // Use 'desc' for descending order
+          },
         },
       },
-    },
-  })
+    })
+    return res
+  } catch (error) {
+    console.error(error)
+    redirect("/error")
+  }
 }
 const createParticipant = (body: CreateParticipantBody) => {
   return prisma.user.create({
