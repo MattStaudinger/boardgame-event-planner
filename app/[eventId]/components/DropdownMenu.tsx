@@ -15,15 +15,18 @@ import {
 } from "@headlessui/react"
 import { BsThreeDotsVertical } from "react-icons/bs"
 import Link from "next/link"
+import type { User } from "@prisma/client"
+
+import { deleteParticipant } from "../../actions"
 
 type DropdownMenuProps = {
   eventId: string
-  participantId: string
+  participant: User
 }
 
 export default function DropdownMenu({
   eventId,
-  participantId,
+  participant,
 }: DropdownMenuProps) {
   const [isWarningModalOpen, setIsWarningModalOpen] = useState(false)
 
@@ -53,7 +56,7 @@ export default function DropdownMenu({
           <>
             <MenuItem>
               <Link
-                href={`${eventId}/join/${participantId}`}
+                href={`${eventId}/join/${participant.id}`}
                 className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/30"
               >
                 <MdModeEditOutline className="w-[16px] h-[16px] text-white" />
@@ -102,7 +105,7 @@ export default function DropdownMenu({
                 </Button>
                 <Button
                   className="rounded  my-[16px] bg-custom-red py-2 px-4 text-md text-white data-[hover]:bg-custom-red-hover data-[active]:bg-custom-green-hover"
-                  onClick={closeWarningModal}
+                  onClick={() => deleteParticipant({ eventId, participant })}
                 >
                   Remove me
                 </Button>

@@ -61,23 +61,24 @@ export default function JoinEventForm({
             <p className="text-sm/6 text-black/50">
               {getSuccessMessage({ isOnWaitingList, isEdit })}
             </p>
-
-            <AddToCalendarButton
-              name="Boardgame night!"
-              description="The boardgame night you never forget! The location will be announced some days prior the event."
-              startDate={dayjs(event.date).format("YYYY-MM-DD")}
-              startTime={dayjs(event.date).format("HH:mm")}
-              endTime={dayjs(event.date).add(4, "hour").format("HH:mm")}
-              timeZone="Europe/Berlin"
-              location="Berlin"
-              options="'Apple','Google','iCal','Outlook.com','Yahoo','Microsoft365','MicrosoftTeams'"
-              trigger="click"
-              hideBackground
-              lightMode="light"
-              hideCheckmark
-            />
+            <div className="my-[8px]">
+              <AddToCalendarButton
+                name="Boardgame night!"
+                description="The boardgame night you never forget! The location will be announced some days prior the event."
+                startDate={dayjs(event.date).format("YYYY-MM-DD")}
+                startTime={dayjs(event.date).format("HH:mm")}
+                endTime={dayjs(event.date).add(4, "hour").format("HH:mm")}
+                timeZone="Europe/Berlin"
+                location="Berlin"
+                options="'Apple','Google','iCal','Outlook.com','Yahoo','Microsoft365','MicrosoftTeams'"
+                trigger="click"
+                hideBackground
+                lightMode="light"
+                hideCheckmark
+              />
+            </div>
             <Button
-              className="rounded w-full my-[16px] bg-black/70 py-2 px-4 text-md text-white data-[hover]:bg-black/80 data-[active]:bg-black/80"
+              className="rounded w-full my-[16px] bg-custom-green  py-2 px-4 text-md text-white data-[hover]:bg-custom-green-hover data-[active]:bg-custom-green-hover"
               onClick={backToEventPage}
             >
               Back to event page
