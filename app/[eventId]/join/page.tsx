@@ -5,6 +5,7 @@ import { getEvent } from "../../../utils/server-api"
 import Form from "./components/form"
 import NavBackButton from "../../../components/NavBackButton"
 import { hasEventReachedMaxParticipants } from "../../../utils/utils"
+import { createNewParticipant } from "../../actions"
 
 type EventProps = {
   params: {
@@ -34,7 +35,11 @@ export default async function JoinEvent({ params }: EventProps) {
             will be notified via email if a spot becomes available.
           </p>
         )}
-        <Form event={event} isOnWaitingList={isOnWaitingList} />
+        <Form
+          event={event}
+          isOnWaitingList={isOnWaitingList}
+          onSubmit={createNewParticipant}
+        />
 
         <Link
           href={`/${event.id}`}

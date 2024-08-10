@@ -51,7 +51,7 @@ export default function DropdownMenu({
         <MenuItems
           transition
           anchor="bottom end"
-          className="w-52 origin-top-right rounded-md border border-white/5 bg-custom-green p-1 text-sm/6  transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
+          className="w-52 origin-top-right rounded-md border border-white/5 bg-custom-green p-1 text-base  transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
         >
           <>
             <MenuItem>

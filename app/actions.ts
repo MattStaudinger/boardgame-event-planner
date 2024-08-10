@@ -3,14 +3,16 @@
 import { z } from "zod"
 import { revalidatePath } from "next/cache"
 import type { User } from "@prisma/client"
+import { headers } from "next/headers"
+import { redirect } from "next/navigation"
 
 import { CreateParticipantBody, UpdateParticipantBody } from "../types/types"
-import { redirect } from "next/navigation"
 import {
   createParticipant,
   updateParticipant as updateParticipantInDB,
   deleteParticipant as deleteParticipantInDB,
 } from "../utils/server-api"
+import { rateLimit } from "../utils/rateLimit"
 
 export type State = {
   errors?: {
@@ -24,7 +26,7 @@ export type State = {
 
 const FormSchema = z.object({
   name: z.string().min(1, { message: "This field is required" }),
-  email: z.string().email(),
+  email: z.string().email().or(z.literal("")),
   note: z.string().max(500),
   canHost: z.boolean(),
   eventId: z.string(),
@@ -38,6 +40,15 @@ export async function createNewParticipant(
   prevState: State,
   formData: FormData
 ) {
+  const ip = headers().get("x-forwarded-for") ?? "unknown"
+  const isRateLimited: boolean = rateLimit(ip)
+
+  if (isRateLimited) {
+    return {
+      message: "You created too many new participants. Please try again later.",
+      success: false,
+    }
+  }
   const data = Object.fromEntries(formData.entries())
 
   // the value of canHost is a string, so we need to convert it to a boolean
@@ -46,7 +57,7 @@ export async function createNewParticipant(
 
   const validatedData = FormSchemaCreate.safeParse({
     name: data.name,
-    email: data.email,
+    email: data.email || "",
     note: data.note,
     canHost: canHost,
     eventId: data.eventId,
@@ -82,6 +93,16 @@ export async function createNewParticipant(
 }
 
 export async function updateParticipant(prevState: State, formData: FormData) {
+  const ip = headers().get("x-forwarded-for") ?? "unknown"
+  const isRateLimited: boolean = rateLimit(ip)
+
+  if (isRateLimited) {
+    return {
+      message: "You updated too many participants. Please try again later.",
+      success: false,
+    }
+  }
+
   const data = Object.fromEntries(formData.entries())
 
   // the value of canHost is a string, so we need to convert it to a boolean
@@ -90,7 +111,7 @@ export async function updateParticipant(prevState: State, formData: FormData) {
 
   const validatedData = FormSchemaEdit.safeParse({
     name: data.name,
-    email: data.email,
+    email: data.email || "",
     note: data.note,
     canHost: canHost,
     eventId: data.eventId,
@@ -110,7 +131,11 @@ export async function updateParticipant(prevState: State, formData: FormData) {
   try {
     await updateParticipantInDB(body)
 
-    revalidatePath(`/${body.eventId}`)
+    // When nextJs gets updated, we will call in the future revalidatePath(`/${body.eventId}`) - currently,
+    // revalidatePath invalidates all the routes in the client-side Router Cache and hence wouldn't
+    // trigger the success modal. NextJS docs state, that this behavior is temporary and will be updated in the future to
+    // apply only to the specific path. https://nextjs.org/docs/app/api-reference/functions/revalidatePath
+    return { success: true, message: `Updated participant of event` }
   } catch (error) {
     console.log("error: ", error)
     // Return a NextResponse object with an error message and status code

@@ -15,7 +15,7 @@ import { useFormState } from "react-dom"
 import type { User } from "@prisma/client"
 
 import { EventWithParticipants } from "../../../../types/types"
-import { createNewParticipant, State } from "../../../actions"
+import { State } from "../../../actions"
 import SuccessModal from "./SuccessModal"
 import SubmitButton from "./SubmitButton"
 
@@ -24,6 +24,7 @@ type JoinEventFormProps = {
   participant?: User
   isOnWaitingList: boolean
   isEdit?: boolean
+  onSubmit: (prevState: State, formData: FormData) => Promise<State>
 }
 
 const initialState: State = {
@@ -37,13 +38,11 @@ export default function JoinEventForm({
   participant,
   isOnWaitingList,
   isEdit,
+  onSubmit,
 }: JoinEventFormProps) {
   const router = useRouter()
 
-  const [formState, formAction] = useFormState(
-    createNewParticipant,
-    initialState
-  )
+  const [formState, formAction] = useFormState(onSubmit, initialState)
 
   const backToEventPage = () => {
     router.push(`/${event.id}`)
@@ -112,7 +111,8 @@ export default function JoinEventForm({
           <Field>
             <Label className="font-medium text-black/70">Notes</Label>
             <Description className="text-xs/6 text-black/50">
-              You come later or bring cake? Let us know!
+              You come later, have a boardgame suggestion or bring cake? Let us
+              know!
             </Description>
             <Textarea
               name="note"

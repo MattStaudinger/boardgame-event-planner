@@ -5,6 +5,7 @@ import { getEvent } from "../../../../utils/server-api"
 import Form from "../components/form"
 import NavBackButton from "../../../../components/NavBackButton"
 import { isParticipantOnWaitingList } from "../../../../utils/utils"
+import { updateParticipant } from "../../../actions"
 
 type EventProps = {
   params: {
@@ -48,6 +49,7 @@ export default async function EditParticipant({ params }: EventProps) {
           participant={participant}
           isOnWaitingList={isOnWaitingList}
           isEdit
+          onSubmit={updateParticipant}
         />
 
         <Link
