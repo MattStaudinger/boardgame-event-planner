@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
+import Script from "next/script"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -16,6 +17,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Script
+        defer
+        src="https://cloud.umami.is/script.js"
+        strategy="lazyOnload"
+        data-website-id="bccbde04-2405-429c-be9e-28b39d51cd5e"
+      />
       <body className={inter.className}>
         <main className="w-full mdh-full flex flex-col justify-center items-center p-4">
           <div className="w-full md:w-[400px] mdh-full flex flex-col justify-center items-center gap-[24px]">

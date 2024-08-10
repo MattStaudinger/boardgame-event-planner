@@ -81,10 +81,7 @@ export default function JoinEventForm({
             </div>
           </Field>
           <Field>
-            <Label className=" font-medium text-black/70">
-              Email
-              <span className="text-red-500 text-sm ml-[2px] align-top">*</span>
-            </Label>
+            <Label className=" font-medium text-black/70">Email</Label>
             <Description className="text-xs/6 text-black/50">
               Used for sending out a reminder before the event
             </Description>

@@ -32,6 +32,7 @@ const SubmitButton = ({ isOnWaitingList, isEdit }: SubmitButtonProps) => {
       formNoValidate
       aria-disabled={pending}
       className="rounded mt-[36px] w-full flex justify-center font-md font-semibold mb-[4px] bg-custom-green py-2 px-8 text-md text-white data-[hover]:bg-custom-green-hover data-[active]:bg-custom-green-hover"
+      data-umami-event={isEdit ? "Update-button" : "Create-button"}
     >
       {pending ? (
         <>

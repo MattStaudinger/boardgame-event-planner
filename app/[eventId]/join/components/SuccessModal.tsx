@@ -1,5 +1,4 @@
 "use client"
-
 import {
   Button,
   Dialog,
@@ -11,7 +10,7 @@ import { EventWithParticipants } from "../../../../types/types"
 import { AddToCalendarButton } from "add-to-calendar-button-react"
 import dayjs from "dayjs"
 
-type JoinEventFormProps = {
+type SuccessModalProps = {
   event: EventWithParticipants
   isSuccessModalOpen: boolean
   backToEventPage: () => void
@@ -34,13 +33,13 @@ const getSuccessMessage = ({
     : "You joined the event"
 }
 
-export default function JoinEventForm({
+export default function SuccessModal({
   event,
   isSuccessModalOpen,
   backToEventPage,
   isOnWaitingList,
   isEdit,
-}: JoinEventFormProps) {
+}: SuccessModalProps) {
   return (
     <Dialog
       open={isSuccessModalOpen}
@@ -75,6 +74,7 @@ export default function JoinEventForm({
                 hideBackground
                 lightMode="light"
                 hideCheckmark
+                data-umami-event="calendar-button saved"
               />
             </div>
             <Button

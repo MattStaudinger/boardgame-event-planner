@@ -29,7 +29,6 @@ export const GET = async () => {
       nextMaxParticipants = 4
     }
 
-    console.log("nextMaxParticipants: ", nextMaxParticipants)
     await prisma.event.create({
       data: {
         date: nextDate,

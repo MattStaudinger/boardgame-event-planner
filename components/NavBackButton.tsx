@@ -14,6 +14,7 @@ export default async function NavBackButton({
     <Link
       href={route}
       className="self-start mt-[16px] px-2 flex items-center text-black/50  hover:text-black/40"
+      data-umami-event="back click"
     >
       <MdOutlineArrowBackIosNew className="" />
       <span className="ml-[4px] underline">{label}</span>
