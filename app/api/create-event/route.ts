@@ -6,7 +6,7 @@ import { getFutureEvents } from "../../../utils/server-api"
 
 export const dynamic = "force-dynamic" // static by default, unless reading the request
 
-export const POST = async () => {
+export const GET = async () => {
   try {
     const events = await getFutureEvents()
 
