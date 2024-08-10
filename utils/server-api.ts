@@ -14,6 +14,9 @@ const getFutureEvents = async () => {
           gte: today,
         },
       },
+      orderBy: {
+        date: "asc",
+      },
     })
     return res
   } catch (error) {
