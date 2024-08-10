@@ -15,7 +15,9 @@ export default async function Home() {
         Boardgame night
       </h1>
 
-      <h2 className="text-[#555555] my-[32px] font-bold text-lg">Dates</h2>
+      <h2 className="text-[#555555] my-[32px] font-bold text-lg">
+        Select the date you want to join
+      </h2>
       <div className="flex flex-col gap-8 w-full ">
         {events.map((event, index) => (
           <Link key={event.id} href={`/${event.id}`}>

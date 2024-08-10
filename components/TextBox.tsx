@@ -21,14 +21,14 @@ export default async function TextBox({
         "flex",
         "justify-center",
         "items-center",
-
+        "text-white",
         "p-[16px]",
 
         {
-          "hover:bg-[#e0e0e0]": index % 2 === 0,
-          "bg-[#ECECEC]": index % 2 === 0,
-          "hover:bg-[#d6d6d6]": index % 2 === 1,
-          "bg-[#b9b9b9]": index % 2 === 1,
+          "hover:bg-custom-blue/75": index % 2 === 0,
+          "bg-custom-blue": index % 2 === 0,
+          "hover:bg-custom-green-pastel/75": index % 2 === 1,
+          "bg-custom-green-pastel": index % 2 === 1,
         }
       )}
     >
