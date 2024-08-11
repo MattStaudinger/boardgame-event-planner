@@ -5,6 +5,7 @@ import Link from "next/link"
 import { getEvent } from "../../utils/server-api"
 import ParticipantItem from "./components/ParticipantItem"
 import NavBackButton from "../../components/NavBackButton"
+import EventEmptyState from "./components/EmptyState"
 
 type EventProps = {
   params: {
@@ -29,6 +30,8 @@ const getAddressMessage = (participantsThatCanHost: User[]) => {
   }
 }
 
+const MAX_PARTICIPANTS_TO_SHOW_JOIN_BUTTON_TOP = 4
+
 export default async function Event({ params }: EventProps) {
   const event = await getEvent(params.eventId)
 
@@ -36,21 +39,40 @@ export default async function Event({ params }: EventProps) {
     return <div>Event not found</div>
   }
 
+  if (event.participants.length === 0) {
+    return <EventEmptyState event={event} />
+  }
+
   const participantsThatCanHost = event.participants.filter(
     (participant) => participant.canHost
   )
-  console.log("participantsThatCanHost: ", participantsThatCanHost)
 
   const noParticipantsCanHost = participantsThatCanHost.length === 0
   const addressMessage = getAddressMessage(participantsThatCanHost)
 
   return (
     <>
-      <NavBackButton route="/" label="All events" />
+      <div className="flex w-full items-center justify-between">
+        <NavBackButton route="/" label="All events" hasSecondButtonInRow />
+        {/* On small screens we want to show the CTA button another time to make sure it is visible without scrolling */}
+        {event.participants.length >
+          MAX_PARTICIPANTS_TO_SHOW_JOIN_BUTTON_TOP && (
+          <Link
+            href={`/${event.id}/join`}
+            className="rounded font-semibold bg-custom-green-pastel py-1 px-3 text-sm text-white data-[hover]:bg-custom-green-hover data-[active]:bg-custom-green-hover"
+            data-umami-event="join click top"
+          >
+            {event.participants.length >= event.maxParticipants
+              ? "Join the waiting list"
+              : "Join"}
+          </Link>
+        )}
+      </div>
       <h1 className="text-custom-green text-2xl font-bold">
         {dayjs(event.date).format("ddd, DD.MM.YYYY [at] HH:mm")}
       </h1>
       {!noParticipantsCanHost && <p>{addressMessage}</p>}
+
       <h2 className="text-black text-lg font-bold">
         Participants
         <span className="text-sm font-normal">
@@ -73,6 +95,7 @@ export default async function Event({ params }: EventProps) {
       <Link
         href={`/${event.id}/join`}
         className="rounded font-semibold my-[16px] bg-custom-green py-2 px-8 text-md text-white data-[hover]:bg-custom-green-hover data-[active]:bg-custom-green-hover"
+        data-umami-event="join click"
       >
         {event.participants.length >= event.maxParticipants
           ? "Join the waiting list"
