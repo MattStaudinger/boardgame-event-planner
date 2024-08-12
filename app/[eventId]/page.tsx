@@ -6,6 +6,7 @@ import { getEvent } from "../../utils/server-api"
 import ParticipantItem from "./components/ParticipantItem"
 import NavBackButton from "../../components/NavBackButton"
 import EventEmptyState from "./components/EmptyState"
+import { hasEventReachedMaxParticipants } from "../../utils/utils"
 
 type EventProps = {
   params: {
@@ -30,7 +31,7 @@ const getAddressMessage = (participantsThatCanHost: User[]) => {
   }
 }
 
-const MAX_PARTICIPANTS_TO_SHOW_JOIN_BUTTON_TOP = 4
+const MAX_PARTICIPANTS_TO_SHOW_JOIN_BUTTON_TOP = 3
 
 export default async function Event({ params }: EventProps) {
   const event = await getEvent(params.eventId)
@@ -49,6 +50,7 @@ export default async function Event({ params }: EventProps) {
 
   const noParticipantsCanHost = participantsThatCanHost.length === 0
   const addressMessage = getAddressMessage(participantsThatCanHost)
+  const isOnWaitingList = hasEventReachedMaxParticipants(event)
 
   return (
     <>
@@ -71,6 +73,14 @@ export default async function Event({ params }: EventProps) {
       <h1 className="text-custom-green text-2xl font-bold">
         {dayjs(event.date).format("ddd, DD.MM.YYYY [at] HH:mm")}
       </h1>
+
+      {isOnWaitingList && (
+        <p className="text-sm/6 text-black/50 font-bold mb-[16px]">
+          The event is already full... join the waiting list and get notified if
+          a spot becomes available.
+        </p>
+      )}
+
       {!noParticipantsCanHost && <p>{addressMessage}</p>}
 
       <h2 className="text-black text-lg font-bold">
