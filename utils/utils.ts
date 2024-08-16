@@ -1,7 +1,13 @@
+import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
+import timezone from "dayjs/plugin/timezone"
 import { createAvatar } from "@dicebear/core"
 import { lorelei, croodles, notionists } from "@dicebear/collection"
 import { EventWithParticipants } from "../types/types"
 import type { User } from "@prisma/client"
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
 const getRandomAvatar = () => {
   const avatars = [lorelei, notionists, croodles]
@@ -66,8 +72,15 @@ const isParticipantOnWaitingList = (
   return !isParticipantAboveTheWaitingList
 }
 
+const getEventDate = (eventDateUnformatted: Date) => {
+  return dayjs(eventDateUnformatted)
+    .tz("Europe/Berlin")
+    .format("ddd, DD.MM.YYYY [at] HH:mm")
+}
+
 export {
   getRandomAvatar,
   hasEventReachedMaxParticipants,
   isParticipantOnWaitingList,
+  getEventDate,
 }

@@ -1,7 +1,8 @@
 import dayjs from "dayjs"
 import Link from "next/link"
-import type { EventWithParticipants } from "../../../types/types"
 
+import type { EventWithParticipants } from "../../../types/types"
+import { getEventDate } from "../../../utils/utils"
 import NavBackButton from "../../../components/NavBackButton"
 
 type EventProps = {
@@ -9,13 +10,13 @@ type EventProps = {
 }
 
 export default async function EventEmptyState({ event }: EventProps) {
+  const eventDate = getEventDate(event.date)
+
   return (
     <>
       <NavBackButton route="/" label="All events" />
 
-      <h1 className="text-custom-green text-2xl font-bold">
-        {dayjs(event.date).format("ddd, DD.MM.YYYY [at] HH:mm")}
-      </h1>
+      <h1 className="text-custom-green text-2xl font-bold">{eventDate}</h1>
 
       <div className="flex items-center justify-center flex-col gap-[8px] text-black/75 rounded  p-[16px]">
         <p>No participants yet. </p>

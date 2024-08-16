@@ -1,4 +1,3 @@
-import dayjs from "dayjs"
 import type { User } from "@prisma/client"
 import Link from "next/link"
 
@@ -6,7 +5,7 @@ import { getEvent } from "../../utils/server-api"
 import ParticipantItem from "./components/ParticipantItem"
 import NavBackButton from "../../components/NavBackButton"
 import EventEmptyState from "./components/EmptyState"
-import { hasEventReachedMaxParticipants } from "../../utils/utils"
+import { hasEventReachedMaxParticipants, getEventDate } from "../../utils/utils"
 
 type EventProps = {
   params: {
@@ -52,6 +51,7 @@ export default async function Event({ params }: EventProps) {
   const addressMessage = getAddressMessage(participantsThatCanHost)
   const isOnWaitingList = hasEventReachedMaxParticipants(event)
 
+  const eventDate = getEventDate(event.date)
   return (
     <>
       <div className="flex w-full items-center justify-between">
@@ -70,9 +70,7 @@ export default async function Event({ params }: EventProps) {
           </Link>
         )}
       </div>
-      <h1 className="text-custom-green text-2xl font-bold">
-        {dayjs(event.date).format("ddd, DD.MM.YYYY [at] HH:mm")}
-      </h1>
+      <h1 className="text-custom-green text-2xl font-bold">{eventDate}</h1>
 
       {isOnWaitingList && (
         <p className="text-sm/6 text-black/50 font-bold mb-[16px]">
