@@ -83,7 +83,9 @@ export default function JoinEventForm({
           <Field>
             <Label className=" font-medium text-black/70">Email</Label>
             <Description className="text-xs/6 text-black/50">
-              Used for sending out a reminder before the event
+              {isOnWaitingList
+                ? "Sends you an email when a spot gets available"
+                : "Sends out a reminder before the event"}
             </Description>
             <Input
               name="email"

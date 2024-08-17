@@ -72,10 +72,11 @@ const isParticipantOnWaitingList = (
   return !isParticipantAboveTheWaitingList
 }
 
-const getEventDate = (eventDateUnformatted: Date) => {
-  return dayjs(eventDateUnformatted)
-    .tz("Europe/Berlin")
-    .format("ddd, DD.MM.YYYY [at] HH:mm")
+const getEventDate = (
+  eventDateUnformatted: Date,
+  formatOption = "ddd, DD.MM.YYYY [at] HH:mm"
+) => {
+  return dayjs(eventDateUnformatted).tz("Europe/Berlin").format(formatOption)
 }
 
 export {

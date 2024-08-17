@@ -2,15 +2,16 @@ import Image from "next/image"
 import DropdownMenu from "./DropdownMenu"
 import { getRandomAvatar } from "../../../utils/utils"
 import type { User } from "@prisma/client"
+import { EventWithParticipants } from "../../../types/types"
 
 type EventProps = {
   participant: User
-  eventId: string
+  event: EventWithParticipants
 }
 
 export default async function ParticipantItem({
   participant,
-  eventId,
+  event,
 }: EventProps) {
   return (
     <li key={participant.id} className="flex justify-between gap-x-6 py-[16px]">
@@ -34,7 +35,7 @@ export default async function ParticipantItem({
         </div>
       </div>
 
-      <DropdownMenu eventId={eventId} participant={participant} />
+      <DropdownMenu event={event} participant={participant} />
     </li>
   )
 }

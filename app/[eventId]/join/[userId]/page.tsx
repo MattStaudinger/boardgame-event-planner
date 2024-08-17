@@ -1,7 +1,7 @@
 import dayjs from "dayjs"
 import Link from "next/link"
 
-import { getEvent } from "../../../../utils/server-api"
+import { getEventOrRedirect } from "../../../../utils/server-api"
 import Form from "../components/form"
 import NavBackButton from "../../../../components/NavBackButton"
 import { isParticipantOnWaitingList } from "../../../../utils/utils"
@@ -15,7 +15,7 @@ type EventProps = {
 }
 
 export default async function EditParticipant({ params }: EventProps) {
-  const event = await getEvent(params.eventId)
+  const event = await getEventOrRedirect(params.eventId)
 
   const participant = event?.participants.find(
     (participant) => participant.id === params.userId

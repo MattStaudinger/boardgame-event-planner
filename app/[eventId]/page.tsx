@@ -1,7 +1,7 @@
 import type { User } from "@prisma/client"
 import Link from "next/link"
 
-import { getEvent } from "../../utils/server-api"
+import { getEventOrRedirect } from "../../utils/server-api"
 import ParticipantItem from "./components/ParticipantItem"
 import NavBackButton from "../../components/NavBackButton"
 import EventEmptyState from "./components/EmptyState"
@@ -33,7 +33,7 @@ const getAddressMessage = (participantsThatCanHost: User[]) => {
 const MAX_PARTICIPANTS_TO_SHOW_JOIN_BUTTON_TOP = 3
 
 export default async function Event({ params }: EventProps) {
-  const event = await getEvent(params.eventId)
+  const event = await getEventOrRedirect(params.eventId)
 
   if (!event) {
     return <div>Event not found</div>
@@ -96,7 +96,7 @@ export default async function Event({ params }: EventProps) {
             <ParticipantItem
               key={participant.id}
               participant={participant}
-              eventId={event.id}
+              event={event}
             />
           ))}
       </ul>
@@ -122,7 +122,7 @@ export default async function Event({ params }: EventProps) {
                 <ParticipantItem
                   key={participant.id}
                   participant={participant}
-                  eventId={event.id}
+                  event={event}
                 />
               ))}
           </ul>

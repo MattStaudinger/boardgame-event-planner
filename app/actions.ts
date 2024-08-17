@@ -6,11 +6,15 @@ import type { User } from "@prisma/client"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 
-import { CreateParticipantBody, UpdateParticipantBody } from "../types/types"
+import {
+  CreateParticipantBody,
+  UpdateParticipantBody,
+  EventWithParticipants,
+} from "../types/types"
 import {
   createParticipant,
   updateParticipant as updateParticipantInDB,
-  deleteParticipant as deleteParticipantInDB,
+  deleteParticipantAndSendEmailToNextInWaitingList as deleteParticipantInDB,
 } from "../utils/server-api"
 import { rateLimit } from "../utils/rateLimit"
 
@@ -148,15 +152,15 @@ export async function updateParticipant(prevState: State, formData: FormData) {
 
 export async function deleteParticipant({
   participant,
-  eventId,
+  event,
 }: {
   participant: User
-  eventId: string
+  event: EventWithParticipants
 }) {
   try {
-    await deleteParticipantInDB(participant)
+    await deleteParticipantInDB({ participant, event })
 
-    revalidatePath(`/${eventId}`)
+    revalidatePath(`/${event.id}`)
   } catch (error) {
     console.log("error: ", error)
     // Return a NextResponse object with an error message and status code
