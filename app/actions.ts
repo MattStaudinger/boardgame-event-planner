@@ -30,7 +30,7 @@ export type State = {
 
 const FormSchema = z.object({
   name: z.string().min(1, { message: "This field is required" }),
-  email: z.string().email().or(z.literal("")),
+  email: z.string().email(),
   note: z.string().max(500),
   canHost: z.boolean(),
   eventId: z.string(),
@@ -61,7 +61,7 @@ export async function createNewParticipant(
 
   const validatedData = FormSchemaCreate.safeParse({
     name: data.name,
-    email: data.email || "",
+    email: data.email,
     note: data.note,
     canHost: canHost,
     eventId: data.eventId,
