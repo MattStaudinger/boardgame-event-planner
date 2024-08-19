@@ -46,7 +46,6 @@ export default async function Event({ params }: EventProps) {
     (participant) => participant.canHost
   )
 
-  const noParticipantsCanHost = participantsThatCanHost.length === 0
   const addressMessage = getAddressMessage(participantsThatCanHost)
   const isOnWaitingList = hasEventReachedMaxParticipants(event)
 
@@ -56,7 +55,7 @@ export default async function Event({ params }: EventProps) {
       <div className="flex w-full items-center justify-between">
         <NavBackButton route="/" label="All events" hasSecondButtonInRow />
       </div>
-      <div className="overflow-auto flex flex-col items-center gap-[16px] w-full mb-[80px]">
+      <div className="overflow-auto flex flex-col items-center gap-[16px] w-full">
         <h1 className="text-custom-green text-2xl font-bold">{eventDate}</h1>
 
         {isOnWaitingList && (
@@ -87,17 +86,7 @@ export default async function Event({ params }: EventProps) {
               />
             ))}
         </ul>
-        <div className="bg-white absolute w-full bottom-0 left-0 flex justify-center py-[24px]">
-          <Link
-            href={`/${event.id}/join`}
-            className="rounded font-semibold bg-custom-green py-2 px-8 text-md text-white data-[hover]:bg-custom-green-hover data-[active]:bg-custom-green-hover"
-            data-umami-event="join click"
-          >
-            {event.participants.length >= event.maxParticipants
-              ? "Join the waiting list"
-              : "Join"}
-          </Link>
-        </div>
+
         {event.participants.length > event.maxParticipants && (
           <>
             <hr className="h-0.5 w-full border-t-0 bg-black/10" />
@@ -118,6 +107,15 @@ export default async function Event({ params }: EventProps) {
           </>
         )}
       </div>
+      <Link
+        href={`/${event.id}/join`}
+        className="rounded font-semibold bg-custom-green py-2 px-8  text-md text-white data-[hover]:bg-custom-green-hover data-[active]:bg-custom-green-hover"
+        data-umami-event="join click"
+      >
+        {event.participants.length >= event.maxParticipants
+          ? "Join the waiting list"
+          : "Join"}
+      </Link>
     </>
   )
 }
