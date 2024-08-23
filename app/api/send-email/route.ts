@@ -19,7 +19,7 @@ export const GET = async () => {
     const events = await getFutureEvents()
 
     if (events.length === 0) {
-      return NextResponse.json({ data: { message: `No future events` } })
+      return NextResponse.json({ message: `No future events` })
     }
 
     const nextEvent = events[0]
@@ -28,22 +28,27 @@ export const GET = async () => {
     const nextEventDate = dayjs(nextEvent.date).tz("Europe/Berlin")
     console.log("nextEventDate: ", nextEventDate)
     if (nextEventDate.diff(currentDate, "day") > 1) {
-      return NextResponse.json({
-        data: { message: `Next event too far in the future` },
-      })
+      return NextResponse.json(
+        { message: "Next event too far in the future" },
+        { status: 422 }
+      )
     }
 
     const eventWithParticipants = await getEvent(nextEvent.id)
     console.log("eventWithParticipants: ", eventWithParticipants)
 
     if (!eventWithParticipants) {
-      return NextResponse.error()
+      return NextResponse.json(
+        { error: `Internal Server Error - event not found` },
+        { status: 500 }
+      )
     }
 
     if (eventWithParticipants.participants.length === 0) {
-      return NextResponse.json({
-        data: { message: `No participants for the next event` },
-      })
+      return NextResponse.json(
+        { message: "No participants for the next event" },
+        { status: 422 }
+      )
     }
     let participantsEmailPromises: Promise<void>[] = []
     eventWithParticipants.participants.forEach((participant) => {
@@ -55,12 +60,17 @@ export const GET = async () => {
         })
       )
     })
+    console.log("Before settled: ")
 
     await Promise.allSettled(participantsEmailPromises)
 
+    console.log("After settled: ")
+
     return NextResponse.json({ data: { message: `Success` } })
   } catch (error) {
-    console.log("error: ", error)
-    return NextResponse.error()
+    return NextResponse.json(
+      { message: `Internal Server Error ${error}` },
+      { status: 500 }
+    )
   }
 }

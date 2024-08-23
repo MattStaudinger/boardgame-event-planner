@@ -46,8 +46,11 @@ export const GET = async () => {
     }
     await createEvent(nextDate, nextMaxParticipants)
 
-    return NextResponse.json({ data: { message: `Success` } })
+    return NextResponse.json({ message: `Success` })
   } catch (error) {
-    return NextResponse.error()
+    return NextResponse.json(
+      { message: `Internal Server Error ${error}` },
+      { status: 500 }
+    )
   }
 }
