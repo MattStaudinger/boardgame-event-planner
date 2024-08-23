@@ -133,7 +133,7 @@ const sendEmail = async ({
   })
 
   const mailOptions = {
-    from: "boardgamenight@gmx.de",
+    from: "boardgamenight@gmx.net",
     to,
     subject,
     text,
@@ -155,14 +155,14 @@ const sendEmailMoveFromWaitingListToEvent = async (
     subject: `You are now part of the boardgame night on ${getEventDate(
       event.date
     )}`,
-    text: `Hey ${participant.name},\n\nYou just moved from the waiting list and you are now part of the boardgame night on ${eventDate}. If you can't make it, please go to ${eventUrl} and cancel your spot.\n\nSee you soon! 🙌\n\nIf you didn't want this email or don't know where you got it from, please reach out to boardgamenight@gmx.de.`,
+    text: `Hey ${participant.name},\n\nYou just moved from the waiting list and you are now part of the boardgame night on ${eventDate}. If you can't make it, please go to ${eventUrl} and cancel your spot.\n\nSee you soon! 🙌\n\nIf you didn't want this email or don't know where you got it from, please reach out to boardgamenight@gmx.net.`,
     html: `
     <p>Hey ${participant.name}</p>
     <p>You just moved from the waiting list and you are now part of the boardgame night on ${eventDate}.</p>
     <p>If you can't make it, please go to <a href="${eventUrl}">the event page</a> and cancel your spot.</p>
     <p>See you soon! 🙌</p>
     <div style="margin-top: 20px; font-size: 12px; color: #555;">
-      If you didn't want this email or don't know where you got it from, please reach out to <a href="mailto:boardgamenight@gmx.de">boardgamenight@gmx.de</a>.
+      If you didn't want this email or don't know where you got it from, please reach out to <a href="mailto:boardgamenight@gmx.net">boardgamenight@gmx.net</a>.
     </div>
   `,
   }
@@ -188,16 +188,16 @@ const sendEmailReminderBeforeEvent = async ({
     subject: `Reminder for upcoming boardgame night tomorrow on ${getEventDate(
       event.date
     )}`,
-    text: `Hey ${participant.name},\n\nJust a quick reminder that tomorrow, ${eventDate} is the night of your dreams - boardgame night. ${addressMessage} If you can't make it, please go to the event page (${eventUrl}) and cancel your spot.\n\nSee you soon! 🙌 \n\nIf you didn't want this email or don't know where you got it from, please reach out to boardgamenight@gmx.de.`,
+    text: `Hey ${participant.name},\n\nJust a quick reminder that tomorrow, ${eventDate} is the night of your dreams - boardgame night. ${addressMessage} If you can't make it, please go to the event page (${eventUrl}) and cancel your spot.\n\nSee you soon! 🙌 \n\nIf you didn't want this email or don't know where you got it from, please reach out to boardgamenight@gmx.net.`,
     html: `
     <p>Hey ${participant.name}</p>
     <p>Just a quick reminder that tomorrow, ${eventDate} is the night of your dreams - boardgame night.</p>
     <p>${addressMessage} If you can't make it, please go to <a href="${eventUrl}">the event page</a> and cancel your spot.</p>
     <p>See you soon! 🙌</p>
     <div style="margin-top: 20px; font-size: 12px; color: #555;">
-      If you didn't want this email or don't know where you got it from, please reach out to <a href="mailto:boardgamenight@gmx.de">boardgamenight@gmx.de</a>.
+    If you didn't want this email or don't know where you got it from, please reach out to <a href="mailto:boardgamenight@gmx.net">boardgamenight@gmx.net</a>.
     </div>
-  `,
+    `,
   }
 
   return await sendEmail(mailOptions)

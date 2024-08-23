@@ -114,8 +114,8 @@ export default function JoinEventForm({
           <Field>
             <Label className="font-medium text-black/70">Notes</Label>
             <Description className="text-xs/6 text-black/50">
-              You come later, have a boardgame suggestion or bring cake? Let us
-              know!
+              You come later, have a boardgame suggestion or bring cake? Let the
+              others know!
             </Description>
             <Textarea
               name="note"
