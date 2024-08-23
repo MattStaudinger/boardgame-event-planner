@@ -21,7 +21,6 @@ export default async function EditParticipant({ params }: EventProps) {
     (participant) => participant.id === params.userId
   )
 
-  console.log("participant: ", participant)
   if (!event || !participant) {
     return <div>Event or user not found</div>
   }

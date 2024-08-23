@@ -25,9 +25,7 @@ export const GET = async () => {
 
     const nextEvent = events[0]
     const currentDate = dayjs().tz("Europe/Berlin")
-    console.log("currentDate: ", currentDate)
     const nextEventDate = dayjs(nextEvent.date).tz("Europe/Berlin")
-    console.log("nextEventDate: ", nextEventDate)
     if (nextEventDate.diff(currentDate, "day") > 1) {
       return NextResponse.json(
         { message: "Next event too far in the future" },
@@ -36,7 +34,6 @@ export const GET = async () => {
     }
 
     const eventWithParticipants = await getEvent(nextEvent.id)
-    console.log("eventWithParticipants: ", eventWithParticipants)
 
     if (!eventWithParticipants) {
       return NextResponse.json(
@@ -61,12 +58,8 @@ export const GET = async () => {
         })
       )
     })
-    console.log("Before settled: ")
 
-    const res = await Promise.allSettled(participantsEmailPromises)
-    console.log("res: ", res)
-
-    console.log("After settled: ")
+    await Promise.allSettled(participantsEmailPromises)
 
     return NextResponse.json({ data: { message: `Success` } })
   } catch (error) {
