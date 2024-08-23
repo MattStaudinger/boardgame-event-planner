@@ -1,7 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { MdCancel, MdModeEditOutline } from "react-icons/md"
+import { MdDoNotDisturbAlt, MdModeEditOutline } from "react-icons/md"
+
 import {
   Menu,
   MenuButton,
@@ -69,7 +70,7 @@ export default function DropdownMenu({
                 onClick={openWarningModal}
                 className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/30"
               >
-                <MdCancel className="w-[16px] h-[16px] text-white" />
+                <MdDoNotDisturbAlt className="w-[16px] h-[16px] text-white" />
                 <span className="text-white">{"Can't make it"}</span>
               </Button>
             </MenuItem>

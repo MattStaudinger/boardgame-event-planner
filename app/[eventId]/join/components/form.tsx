@@ -158,7 +158,7 @@ export default function JoinEventForm({
               </svg>
             </Checkbox>
             <Label className="text-sm/6 font-medium text-black/50">
-              Are you up to host at your place?
+              I can host at my place
             </Label>
           </Field>
         </Fieldset>
