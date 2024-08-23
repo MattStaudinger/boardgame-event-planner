@@ -62,7 +62,8 @@ export const GET = async () => {
     })
     console.log("Before settled: ")
 
-    await Promise.allSettled(participantsEmailPromises)
+    const res = await Promise.allSettled(participantsEmailPromises)
+    console.log("res: ", res)
 
     console.log("After settled: ")
 
