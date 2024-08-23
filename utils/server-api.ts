@@ -131,7 +131,6 @@ const sendEmail = async ({
       pass: process.env.EMAIL_ACCOUNT_PASSWORD,
     },
   })
-  console.log("transporter: ", transporter)
   console.log("process.env.EMAIL_ACCOUNT: ", process.env.EMAIL_ACCOUNT)
 
   const mailOptions = {
@@ -204,7 +203,7 @@ const sendEmailReminderBeforeEvent = async ({
   `,
   }
 
-  sendEmail(mailOptions)
+  await sendEmail(mailOptions)
 }
 
 const createEvent = async (date: Date, maxParticipants: number) => {
