@@ -131,6 +131,8 @@ const sendEmail = async ({
       pass: process.env.EMAIL_ACCOUNT_PASSWORD,
     },
   })
+  console.log("transporter: ", transporter)
+  console.log("process.env.EMAIL_ACCOUNT: ", process.env.EMAIL_ACCOUNT)
 
   const mailOptions = {
     from: "boardgamenight@gmx.de",
@@ -139,6 +141,8 @@ const sendEmail = async ({
     text,
     html,
   }
+
+  console.log("mailOptions: ", mailOptions)
 
   transporter.sendMail(mailOptions)
 }
