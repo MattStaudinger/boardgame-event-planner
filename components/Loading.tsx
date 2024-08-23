@@ -2,7 +2,7 @@ export default async function Loading() {
   return (
     <div
       role="status"
-      className="flex items-center justify-center w-full h-screen pb-[100px]"
+      className="flex items-center justify-center w-full h-dvh pb-[100px]"
     >
       <svg
         aria-hidden="true"

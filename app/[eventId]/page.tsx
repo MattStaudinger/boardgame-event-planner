@@ -32,7 +32,6 @@ const getAddressMessage = (participantsThatCanHost: User[]) => {
 
 export default async function Event({ params }: EventProps) {
   const event = await getEventOrRedirect(params.eventId)
-  console.log("event: ", event)
 
   if (!event) {
     return <div>Event not found</div>

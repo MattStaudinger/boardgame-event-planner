@@ -24,8 +24,8 @@ export default function RootLayout({
         data-website-id="bccbde04-2405-429c-be9e-28b39d51cd5e"
       />
       <body className={inter.className}>
-        <main className="w-full h-screen flex flex-col items-center p-4">
-          <div className="w-full h-full md:w-[400px] flex flex-col items-center gap-[24px]">
+        <main className="w-full  flex h-dvh flex-col items-center p-4">
+          <div className="w-full md:w-[400px] h-full flex flex-col items-center gap-[24px]">
             {children}
           </div>
         </main>
