@@ -143,7 +143,7 @@ const sendEmail = async ({
 
   console.log("mailOptions: ", mailOptions)
 
-  transporter.sendMail(mailOptions)
+  return transporter.sendMail(mailOptions)
 }
 
 const sendEmailMoveFromWaitingListToEvent = async (
@@ -170,7 +170,7 @@ const sendEmailMoveFromWaitingListToEvent = async (
   `,
   }
 
-  await sendEmail(mailOptions)
+  return await sendEmail(mailOptions)
 }
 const sendEmailReminderBeforeEvent = async ({
   participant,
@@ -203,7 +203,7 @@ const sendEmailReminderBeforeEvent = async ({
   `,
   }
 
-  await sendEmail(mailOptions)
+  return await sendEmail(mailOptions)
 }
 
 const createEvent = async (date: Date, maxParticipants: number) => {

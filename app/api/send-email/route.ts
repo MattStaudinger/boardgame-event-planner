@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import timezone from "dayjs/plugin/timezone"
+import SMTPTransport from "nodemailer/lib/smtp-transport"
 
 import {
   sendEmailReminderBeforeEvent,
@@ -50,7 +51,7 @@ export const GET = async () => {
         { status: 422 }
       )
     }
-    let participantsEmailPromises: Promise<void>[] = []
+    let participantsEmailPromises: Promise<SMTPTransport.SentMessageInfo>[] = []
     eventWithParticipants.participants.forEach((participant) => {
       // create promise to send email to each participant
       participantsEmailPromises.push(
