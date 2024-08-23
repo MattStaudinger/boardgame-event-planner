@@ -103,14 +103,25 @@ const deleteParticipantAndSendEmailToNextInWaitingList = async ({
     const participantMoveFromWaitingListToEvent =
       event.participants[event.maxParticipants]
     if (participantMoveFromWaitingListToEvent.email) {
-      sendEmail(participantMoveFromWaitingListToEvent, event)
+      sendEmailMoveFromWaitingListToEvent(
+        participantMoveFromWaitingListToEvent,
+        event
+      )
     }
   }
 }
 
-// Function to send email
-const sendEmail = async (participant: User, event: Event) => {
-  // Configure nodemailer
+const sendEmail = async ({
+  to,
+  subject,
+  text,
+  html,
+}: {
+  to: string
+  subject: string
+  text: string
+  html: string
+}) => {
   const transporter = nodemailer.createTransport({
     host: "mail.gmx.net",
     port: 587,
@@ -121,24 +132,87 @@ const sendEmail = async (participant: User, event: Event) => {
     },
   })
 
+  const mailOptions = {
+    from: "boardgamenight@gmx.de",
+    to,
+    subject,
+    text,
+    html,
+  }
+
+  transporter.sendMail(mailOptions)
+}
+
+const sendEmailMoveFromWaitingListToEvent = async (
+  participant: User,
+  event: Event
+) => {
   const eventUrl = `${process.env.BASE_URL}/${event.id}`
   const eventDate = getEventDate(event.date, "dddd, DD.MM.YYYY [at] HH:mm")
 
   const mailOptions = {
-    from: "boardgamenight@gmx.de",
     to: participant.email,
     subject: `You are now part of the boardgame night on ${getEventDate(
       event.date
     )}`,
-    text: `Hey ${participant.name},\n\nYou just moved from the waiting list and you are now part of the boardgame night on ${eventDate}. If you can't make it, please go to ${eventUrl} and cancel your spot.\n\nSee you soon! 🙌`,
+    text: `Hey ${participant.name},\n\nYou just moved from the waiting list and you are now part of the boardgame night on ${eventDate}. If you can't make it, please go to ${eventUrl} and cancel your spot.\n\nSee you soon! 🙌\n\nIf you didn't want this email or don't know where you got it from, please reach out to boardgamenight@gmx.de.`,
     html: `
     <p>Hey ${participant.name}</p>
-    You just moved from the waiting list and you are now part of the boardgame night on ${eventDate}. If you can't make it, please go to <a href="${eventUrl}">the event page</a> and cancel your spot.</p>
+    <p>You just moved from the waiting list and you are now part of the boardgame night on ${eventDate}.</p>
+    <p>If you can't make it, please go to <a href="${eventUrl}">the event page</a> and cancel your spot.</p>
     <p>See you soon! 🙌</p>
+    <div style="margin-top: 20px; font-size: 12px; color: #555;">
+      If you didn't want this email or don't know where you got it from, please reach out to <a href="mailto:boardgamenight@gmx.de">boardgamenight@gmx.de</a>.
+    </div>
   `,
   }
 
-  await transporter.sendMail(mailOptions)
+  await sendEmail(mailOptions)
+}
+const sendEmailReminderBeforeEvent = async ({
+  participant,
+  event,
+}: {
+  participant: User
+  event: Event
+}) => {
+  const eventUrl = `${process.env.BASE_URL}/${event.id}`
+  const eventDate = getEventDate(event.date, "dddd, DD.MM.YYYY [at] HH:mm")
+
+  const addressMessage = event.address
+    ? `The event will take place at ${event.address}.`
+    : "The event's location will be announced soon."
+
+  const mailOptions = {
+    to: participant.email,
+    subject: `Reminder for upcoming boardgame night tomorrow on ${getEventDate(
+      event.date
+    )}`,
+    text: `Hey ${participant.name},\n\nJust a quick reminder that tomorrow, ${eventDate} is the night of your dreams - boardgame night. ${addressMessage} If you can't make it, please go to the event page (${eventUrl}) and cancel your spot.\n\nSee you soon! 🙌 \n\nIf you didn't want this email or don't know where you got it from, please reach out to boardgamenight@gmx.de.`,
+    html: `
+    <p>Hey ${participant.name}</p>
+    <p>Just a quick reminder that tomorrow, ${eventDate} is the night of your dreams - boardgame night.</p>
+    <p>${addressMessage} If you can't make it, please go to <a href="${eventUrl}">the event page</a> and cancel your spot.</p>
+    <p>See you soon! 🙌</p>
+    <div style="margin-top: 20px; font-size: 12px; color: #555;">
+      If you didn't want this email or don't know where you got it from, please reach out to <a href="mailto:boardgamenight@gmx.de">boardgamenight@gmx.de</a>.
+    </div>
+  `,
+  }
+
+  sendEmail(mailOptions)
+}
+
+const createEvent = async (date: Date, maxParticipants: number) => {
+  return prisma.event.create({
+    data: {
+      date,
+      participants: {
+        connect: [],
+      },
+      maxParticipants,
+    },
+  })
 }
 
 export {
@@ -147,4 +221,7 @@ export {
   createParticipant,
   updateParticipant,
   deleteParticipantAndSendEmailToNextInWaitingList,
+  createEvent,
+  sendEmailReminderBeforeEvent,
+  getEvent,
 }

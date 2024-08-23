@@ -6,6 +6,7 @@ import ParticipantItem from "./components/ParticipantItem"
 import NavBackButton from "../../components/NavBackButton"
 import EventEmptyState from "./components/EmptyState"
 import { hasEventReachedMaxParticipants, getEventDate } from "../../utils/utils"
+import { EventWithParticipants } from "../../types/types"
 
 type EventProps = {
   params: {
@@ -13,7 +14,15 @@ type EventProps = {
   }
 }
 
-const getAddressMessage = (participantsThatCanHost: User[]) => {
+const getAddressMessage = (event: EventWithParticipants) => {
+  if (event.address) {
+    return `At: ${event.address}`
+  }
+
+  const participantsThatCanHost = event.participants.filter(
+    (participant) => participant.canHost
+  )
+
   if (participantsThatCanHost.length === 0) {
     return "Host candidates: /"
   } else if (participantsThatCanHost.length > 1) {
@@ -41,11 +50,7 @@ export default async function Event({ params }: EventProps) {
     return <EventEmptyState event={event} />
   }
 
-  const participantsThatCanHost = event.participants.filter(
-    (participant) => participant.canHost
-  )
-
-  const addressMessage = getAddressMessage(participantsThatCanHost)
+  const addressMessage = getAddressMessage(event)
   const isOnWaitingList = hasEventReachedMaxParticipants(event)
 
   const eventDate = getEventDate(event.date)

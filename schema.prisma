@@ -13,17 +13,20 @@ model Event {
     date            DateTime
     participants    User[]
     maxParticipants Int      @default(4)
+    address         String?
+    createdAt       DateTime @default(now())
+    updatedAt       DateTime @updatedAt
 }
 
 model User {
-    id        String   @id @default(cuid())
-    name      String
-    email     String
-    note      String   @db.Text
-    canHost   Boolean  @default(false)
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    eventId   String
-    event     Event    @relation(fields: [eventId], references: [id])
-    hasCanceled     Boolean  @default(false)
+    id          String   @id @default(cuid())
+    name        String
+    email       String
+    note        String   @db.Text
+    canHost     Boolean  @default(false)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    eventId     String
+    event       Event    @relation(fields: [eventId], references: [id])
+    hasCanceled Boolean  @default(false)
 }

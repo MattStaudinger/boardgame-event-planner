@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server"
-import { prisma } from "../../../utils/db"
 import dayjs from "dayjs"
 
-import { getFutureEvents } from "../../../utils/server-api"
+import { getFutureEvents, createEvent } from "../../../utils/server-api"
 
 export const dynamic = "force-dynamic" // static by default, unless reading the request
 
@@ -28,16 +27,7 @@ export const GET = async () => {
       nextDate = dayjs(lastEvent.date).add(14, "day").day(1).toDate()
       nextMaxParticipants = 4
     }
-
-    await prisma.event.create({
-      data: {
-        date: nextDate,
-        participants: {
-          connect: [],
-        },
-        maxParticipants: nextMaxParticipants,
-      },
-    })
+    await createEvent(nextDate, nextMaxParticipants)
 
     return NextResponse.json({ data: { message: `Success` } })
   } catch (error) {
