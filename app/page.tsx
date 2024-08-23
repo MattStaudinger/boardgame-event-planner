@@ -19,12 +19,9 @@ export default async function Home() {
         Select the date you want to join
       </h2>
       <div className="flex flex-col gap-8 w-full ">
-        {events.map((event, index) => (
+        {events.map((event) => (
           <Link key={event.id} href={`/${event.id}`}>
-            <TextBox
-              index={index}
-              label={dayjs(event.date).format("ddd, DD.MM.YYYY")}
-            />
+            <TextBox label={dayjs(event.date).format("ddd, DD.MM.YYYY")} />
           </Link>
         ))}
       </div>

@@ -1,39 +1,11 @@
-import classnames from "classnames"
-
 type TextBoxProps = {
-  index: number
-  label?: string
-  children?: React.ReactNode
+  label: string
 }
 
-export default async function TextBox({
-  index,
-  label,
-  children,
-}: TextBoxProps) {
+export default async function TextBox({ label }: TextBoxProps) {
   return (
-    <div
-      className={classnames(
-        "bg-[#ECECEC]",
-        "w-full",
-        "h-[48px]",
-        "rounded-lg",
-        "flex",
-        "justify-center",
-        "items-center",
-        "text-white",
-        "p-[16px]",
-
-        {
-          "hover:bg-custom-blue/75": index % 2 === 0,
-          "bg-custom-blue": index % 2 === 0,
-          "hover:bg-custom-green-pastel/75": index % 2 === 1,
-          "bg-custom-green-pastel": index % 2 === 1,
-        }
-      )}
-    >
+    <div className="bg-white w-full gap-[8px] h-[48px] rounded-lg flex justify-center items-center text-black/75 p-[16px] border-2 border-solid border-custom-green-pastel hover:border-custom-green-pastel/60 hover:animate-wiggle">
       {label && <span>{label}</span>}
-      {children}
     </div>
   )
 }
