@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server"
 import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
+
+dayjs.extend(utc)
 
 import { getFutureEvents, createEvent } from "../../../utils/server-api"
 
@@ -20,11 +23,25 @@ export const GET = async () => {
 
     if (isSmallEvent) {
       // next date is on a friday 2 weeks after the last event
-      nextDate = dayjs(lastEvent.date).add(14, "day").day(5).toDate()
+      const nextDateDay = dayjs(lastEvent.date).add(14, "day").day(5)
+      nextDate = nextDateDay
+        .utc()
+        .hour(16)
+        .minute(30)
+        .second(0)
+        .millisecond(0)
+        .toDate()
       nextMaxParticipants = 8
     } else {
       // next date is on a monday 2 weeks after the last event
-      nextDate = dayjs(lastEvent.date).add(14, "day").day(1).toDate()
+      const nextDateDay = dayjs(lastEvent.date).add(14, "day").day(1)
+      nextDate = nextDateDay
+        .utc()
+        .hour(16)
+        .minute(30)
+        .second(0)
+        .millisecond(0)
+        .toDate()
       nextMaxParticipants = 4
     }
     await createEvent(nextDate, nextMaxParticipants)
