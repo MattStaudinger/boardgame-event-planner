@@ -13,6 +13,7 @@ export default async function Home() {
   return (
     <>
       <Image
+        className="w-[70%]"
         src="/boardgamenight_grey.webp"
         alt="120 - 240 min, 2 - 8 players, 4 out of 5 strategy"
         width="624"
