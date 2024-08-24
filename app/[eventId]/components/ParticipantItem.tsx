@@ -1,11 +1,11 @@
 import Image from "next/image"
 import DropdownMenu from "./DropdownMenu"
 import { getRandomAvatar } from "../../../utils/utils"
-import type { User } from "@prisma/client"
+import type { Participant } from "@prisma/client"
 import { EventWithParticipants } from "../../../types/types"
 
 type EventProps = {
-  participant: User
+  participant: Participant
   event: EventWithParticipants
 }
 

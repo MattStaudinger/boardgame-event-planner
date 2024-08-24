@@ -8,7 +8,7 @@ import {
   EventWithParticipants,
   UpdateParticipantBody,
 } from "../types/types"
-import type { User, Event } from "@prisma/client"
+import type { Participant, Event } from "@prisma/client"
 
 const getFutureEvents = async () => {
   const today = dayjs().format()
@@ -58,20 +58,20 @@ const getEventOrRedirect = async (id: string) => {
   }
 }
 const createParticipant = (body: CreateParticipantBody) => {
-  return prisma.user.create({
+  return prisma.participant.create({
     data: body,
   })
 }
 const updateParticipant = (body: UpdateParticipantBody) => {
-  return prisma.user.update({
+  return prisma.participant.update({
     where: {
       id: body.id,
     },
     data: body,
   })
 }
-const deleteParticipant = (participant: User) => {
-  return prisma.user.update({
+const deleteParticipant = (participant: Participant) => {
+  return prisma.participant.update({
     where: {
       id: participant.id,
     },
@@ -84,7 +84,7 @@ const deleteParticipantAndSendEmailToNextInWaitingList = async ({
   participant: participantToDelete,
 }: {
   event: EventWithParticipants
-  participant: User
+  participant: Participant
 }) => {
   await deleteParticipant(participantToDelete)
 
@@ -144,7 +144,7 @@ const sendEmail = async ({
 }
 
 const sendEmailMoveFromWaitingListToEvent = async (
-  participant: User,
+  participant: Participant,
   event: Event
 ) => {
   const eventUrl = `${process.env.BASE_URL}/${event.id}`
@@ -173,7 +173,7 @@ const sendEmailReminderBeforeEvent = async ({
   participant,
   event,
 }: {
-  participant: User
+  participant: Participant
   event: Event
 }) => {
   const eventUrl = `${process.env.BASE_URL}/${event.id}`
@@ -188,11 +188,12 @@ const sendEmailReminderBeforeEvent = async ({
     subject: `Reminder for upcoming boardgame night tomorrow on ${getEventDate(
       event.date
     )}`,
-    text: `Hey ${participant.name},\n\nJust a quick reminder that tomorrow, ${eventDate} is the night of your dreams - boardgame night. ${addressMessage} If you can't make it, please go to the event page (${eventUrl}) and cancel your spot.\n\nSee you soon! 🙌 \n\nIf you didn't want this email or don't know where you got it from, please reach out to boardgamenight@gmx.net.`,
+    text: `Hey ${participant.name},\n\nJust a quick reminder that tomorrow, ${eventDate} is the night of your dreams - boardgame night. ${addressMessage} If you can't make it, please go to the event page (${eventUrl}) and cancel your spot.\n\nWe will eat dinner together - either ordering or preparing, so no need to eat up front.\n\nSee you soon! 🙌 \n\nIf you didn't want this email or don't know where you got it from, please reach out to boardgamenight@gmx.net.`,
     html: `
     <p>Hey ${participant.name}</p>
     <p>Just a quick reminder that tomorrow, ${eventDate} is the night of your dreams - boardgame night.</p>
     <p>${addressMessage} If you can't make it, please go to <a href="${eventUrl}">the event page</a> and cancel your spot.</p>
+    <p>We will eat dinner together - either ordering or preparing, so no need to eat up front.</p>
     <p>See you soon! 🙌</p>
     <div style="margin-top: 20px; font-size: 12px; color: #555;">
     If you didn't want this email or don't know where you got it from, please reach out to <a href="mailto:boardgamenight@gmx.net">boardgamenight@gmx.net</a>.

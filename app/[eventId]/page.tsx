@@ -1,4 +1,3 @@
-import type { User } from "@prisma/client"
 import Link from "next/link"
 
 import { getEventOrRedirect } from "../../utils/server-api"

@@ -30,7 +30,11 @@ const getSuccessMessage = ({
   }
   return isOnWaitingList
     ? "You are now on the waiting list. We will send an email in case a spot becomes available."
-    : "You joined the event"
+    : "You joined the event."
+}
+
+const getDinnerPlanMessage = () => {
+  return "Quick info: We will eat dinner together - either ordering or preparing, so no need to eat up front."
 }
 
 export default function SuccessModal({
@@ -60,6 +64,11 @@ export default function SuccessModal({
             <p className="text-sm/6 text-black/50">
               {getSuccessMessage({ isOnWaitingList, isEdit })}
             </p>
+            {!isEdit && (
+              <p className="text-sm/6 text-black/50">
+                {getDinnerPlanMessage()}
+              </p>
+            )}
             <div className="my-[8px]">
               <AddToCalendarButton
                 name="Boardgame night!"

@@ -4,7 +4,7 @@ import timezone from "dayjs/plugin/timezone"
 import { createAvatar } from "@dicebear/core"
 import { lorelei, croodles, notionists } from "@dicebear/collection"
 import { EventWithParticipants } from "../types/types"
-import type { User } from "@prisma/client"
+import type { Participant } from "@prisma/client"
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -61,9 +61,9 @@ const hasEventReachedMaxParticipants = (event: EventWithParticipants) =>
 
 const isParticipantOnWaitingList = (
   event: EventWithParticipants,
-  selectedParticipant: User
+  selectedParticipant: Participant
 ) => {
-  // in case a user edits its data, we need to check if the user is part of the waiting list or in the event
+  // in case a participant edits its data, we need to check if the participant is part of the waiting list or in the event
   const isParticipantAboveTheWaitingList =
     event.participants.findIndex(
       (participant) => participant.id === selectedParticipant?.id

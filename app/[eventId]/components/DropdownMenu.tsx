@@ -16,13 +16,13 @@ import {
 } from "@headlessui/react"
 import { BsThreeDotsVertical } from "react-icons/bs"
 import Link from "next/link"
-import type { User } from "@prisma/client"
+import type { Participant } from "@prisma/client"
 import { EventWithParticipants } from "../../../types/types"
 import { deleteParticipant } from "../../actions"
 
 type DropdownMenuProps = {
   event: EventWithParticipants
-  participant: User
+  participant: Participant
 }
 
 export default function DropdownMenu({

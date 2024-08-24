@@ -9,16 +9,16 @@ datasource db {
 }
 
 model Event {
-    id              String   @id @default(cuid())
+    id              String        @id @default(cuid())
     date            DateTime
-    participants    User[]
-    maxParticipants Int      @default(4)
+    participants    Participant[]
+    maxParticipants Int           @default(4)
     address         String?
-    createdAt       DateTime @default(now())
-    updatedAt       DateTime @updatedAt
+    createdAt       DateTime      @default(now())
+    updatedAt       DateTime      @updatedAt
 }
 
-model User {
+model Participant {
     id          String   @id @default(cuid())
     name        String
     email       String

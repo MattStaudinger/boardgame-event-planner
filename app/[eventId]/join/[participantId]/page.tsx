@@ -10,7 +10,7 @@ import { updateParticipant } from "../../../actions"
 type EventProps = {
   params: {
     eventId: string
-    userId: string
+    participantId: string
   }
 }
 
@@ -18,11 +18,11 @@ export default async function EditParticipant({ params }: EventProps) {
   const event = await getEventOrRedirect(params.eventId)
 
   const participant = event?.participants.find(
-    (participant) => participant.id === params.userId
+    (participant) => participant.id === params.participantId
   )
 
   if (!event || !participant) {
-    return <div>Event or user not found</div>
+    return <div>Event or participant not found</div>
   }
   const isOnWaitingList = isParticipantOnWaitingList(event, participant)
 

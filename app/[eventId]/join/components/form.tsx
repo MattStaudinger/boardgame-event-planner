@@ -12,7 +12,7 @@ import {
 import classnames from "classnames"
 import { useRouter } from "next/navigation"
 import { useFormState } from "react-dom"
-import type { User } from "@prisma/client"
+import type { Participant } from "@prisma/client"
 
 import { EventWithParticipants } from "../../../../types/types"
 import { State } from "../../../actions"
@@ -21,7 +21,7 @@ import SubmitButton from "./SubmitButton"
 
 type JoinEventFormProps = {
   event: EventWithParticipants
-  participant?: User
+  participant?: Participant
   isOnWaitingList: boolean
   isEdit?: boolean
   onSubmit: (prevState: State, formData: FormData) => Promise<State>
@@ -158,7 +158,7 @@ export default function JoinEventForm({
               </svg>
             </Checkbox>
             <Label className="text-sm/6 font-medium text-black/50">
-              I can host at my place
+              I could host at my place
             </Label>
           </Field>
         </Fieldset>

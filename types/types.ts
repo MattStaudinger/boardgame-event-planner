@@ -1,13 +1,13 @@
-import type { Event, User } from "@prisma/client"
+import type { Event, Participant } from "@prisma/client"
 
-type EventWithParticipants = Event & { participants: User[] }
+type EventWithParticipants = Event & { participants: Participant[] }
 
 type CreateParticipantBody = Omit<
-  User,
+  Participant,
   "id" | "createdAt" | "updatedAt" | "hasCanceled"
 >
 type UpdateParticipantBody = Omit<
-  User,
+  Participant,
   "createdAt" | "updatedAt" | "hasCanceled"
 >
 

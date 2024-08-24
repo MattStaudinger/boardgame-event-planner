@@ -2,7 +2,7 @@
 
 import { z } from "zod"
 import { revalidatePath } from "next/cache"
-import type { User } from "@prisma/client"
+import type { Participant } from "@prisma/client"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 
@@ -78,7 +78,7 @@ export async function createNewParticipant(
   const body: CreateParticipantBody = validatedData.data
 
   try {
-    // create user
+    // create participant
     await createParticipant(body)
 
     // When nextJs gets updated, we will call in the future revalidatePath(`/${body.eventId}`) - currently,
@@ -154,7 +154,7 @@ export async function deleteParticipant({
   participant,
   event,
 }: {
-  participant: User
+  participant: Participant
   event: EventWithParticipants
 }) {
   try {
