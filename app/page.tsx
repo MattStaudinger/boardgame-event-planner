@@ -1,6 +1,7 @@
 import Link from "next/link"
 import dayjs from "dayjs"
 import "dayjs/locale/de"
+import Image from "next/image"
 
 import { getFutureEvents } from "../utils/server-api"
 import TextBox from "../components/TextBox"
@@ -11,11 +12,17 @@ export default async function Home() {
   const events = await getFutureEvents()
   return (
     <>
-      <h1 className="text-custom-green text-2xl mt-12 font-bold">
-        Boardgame night
+      <Image
+        src="/boardgamenight_grey.webp"
+        alt="120 - 240 min, 2 - 8 players, 4 out of 5 strategy"
+        width="624"
+        height="223"
+      />
+      <h1 className="text-custom-green text-2xl font-bold">
+        Boardgame night 🥳
       </h1>
 
-      <h2 className="text-[#555555] my-[32px] font-bold text-lg">
+      <h2 className="text-[#555555] my-[16px] font-bold text-lg">
         Select the date you want to join
       </h2>
       <div className="flex flex-col gap-8 w-full ">
