@@ -22,6 +22,10 @@ export default async function Home() {
       <h1 className="text-custom-green text-2xl font-bold">
         Boardgame night 🥳
       </h1>
+      <p className="text-[#555555]">
+        Welcome to the boardgame night! New events will be created every 2
+        weeks, so check here periodically for upcoming dates.
+      </p>
 
       <h2 className="text-[#555555] my-[16px] font-bold text-lg">
         Select the date you want to join

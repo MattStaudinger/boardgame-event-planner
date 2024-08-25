@@ -34,7 +34,7 @@ const getSuccessMessage = ({
 }
 
 const getDinnerPlanMessage = () => {
-  return "Quick info: We will eat dinner together - either ordering or preparing, so no need to eat up front."
+  return "🍔 We will eat dinner together - either ordering or preparing, so no need to eat up front."
 }
 
 export default function SuccessModal({
@@ -66,26 +66,35 @@ export default function SuccessModal({
             </p>
             {!isEdit && (
               <p className="text-sm/6 text-black/50">
+                {
+                  "🏠 The address will be decided on some days prior the event and posted on the event page. You'll also receive a reminder with the address a day before the event."
+                }
+              </p>
+            )}
+            {!isEdit && (
+              <p className="text-sm/6 text-black/50">
                 {getDinnerPlanMessage()}
               </p>
             )}
-            <div className="my-[8px]">
-              <AddToCalendarButton
-                name="Boardgame night!"
-                description="The boardgame night you never forget! The location will be announced some days prior the event."
-                startDate={dayjs(event.date).format("YYYY-MM-DD")}
-                startTime={dayjs(event.date).format("HH:mm")}
-                endTime={dayjs(event.date).add(4, "hour").format("HH:mm")}
-                timeZone="Europe/Berlin"
-                location="Berlin"
-                options="'Apple','Google','iCal','Outlook.com','Yahoo','Microsoft365','MicrosoftTeams'"
-                trigger="click"
-                hideBackground
-                lightMode="light"
-                hideCheckmark
-                data-umami-event="calendar-button saved"
-              />
-            </div>
+            {!isOnWaitingList && (
+              <div className="my-[8px]">
+                <AddToCalendarButton
+                  name="Boardgame night!"
+                  description="The boardgame night you never forget! The location will be announced some days prior the event."
+                  startDate={dayjs(event.date).format("YYYY-MM-DD")}
+                  startTime={dayjs(event.date).format("HH:mm")}
+                  endTime={dayjs(event.date).add(4, "hour").format("HH:mm")}
+                  timeZone="Europe/Berlin"
+                  location="Berlin"
+                  options="'Apple','Google','iCal','Outlook.com','Yahoo','Microsoft365','MicrosoftTeams'"
+                  trigger="click"
+                  hideBackground
+                  lightMode="light"
+                  hideCheckmark
+                  data-umami-event="calendar-button saved"
+                />
+              </div>
+            )}
             <Button
               className="rounded w-full my-[16px] bg-custom-green  py-2 px-4 text-md text-white data-[hover]:bg-custom-green-hover data-[active]:bg-custom-green-hover"
               onClick={backToEventPage}
