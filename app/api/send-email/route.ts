@@ -4,6 +4,7 @@ import utc from "dayjs/plugin/utc"
 import timezone from "dayjs/plugin/timezone"
 import SMTPTransport from "nodemailer/lib/smtp-transport"
 import type { Event, Participant } from "@prisma/client"
+import { getParticipantsAboveTheWaitingList } from "../../../utils/utils"
 
 import {
   sendEmailReminderBeforeEvent,
@@ -33,7 +34,13 @@ const sendEmail = async (event: Event) => {
     )
   }
   let participantsEmailPromises: Promise<SMTPTransport.SentMessageInfo>[] = []
-  eventWithParticipants.participants.forEach((participant) => {
+
+  const participantsAboveTheWaitingList = getParticipantsAboveTheWaitingList(
+    eventWithParticipants.participants,
+    eventWithParticipants.maxParticipants
+  )
+
+  participantsAboveTheWaitingList.forEach((participant) => {
     // create promise to send email to each participant
     participantsEmailPromises.push(
       sendEmailReminderBeforeEvent({

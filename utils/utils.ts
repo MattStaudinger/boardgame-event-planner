@@ -56,16 +56,37 @@ const getRandomAvatar = () => {
   return generatedAvatar.toDataUri()
 }
 
-const hasEventReachedMaxParticipants = (event: EventWithParticipants) =>
-  event.participants.length >= event.maxParticipants
+const getParticipantsThatHaveNotCanceled = (participants: Participant[]) => {
+  return participants.filter((participant) => !participant.canceled)
+}
+const getParticipantsAboveTheWaitingList = (
+  participants: Participant[],
+  maxParticipants: number
+) => {
+  return getParticipantsThatHaveNotCanceled(participants).filter(
+    (participant, index) => index < maxParticipants
+  )
+}
+
+const hasEventReachedMaxParticipants = (event: EventWithParticipants) => {
+  const participantsThatHaveNotCanceled = getParticipantsThatHaveNotCanceled(
+    event.participants
+  )
+
+  participantsThatHaveNotCanceled.length >= event.maxParticipants
+}
 
 const isParticipantOnWaitingList = (
   event: EventWithParticipants,
   selectedParticipant: Participant
 ) => {
+  const participantsThatHaveNotCanceled = getParticipantsThatHaveNotCanceled(
+    event.participants
+  )
+
   // in case a participant edits its data, we need to check if the participant is part of the waiting list or in the event
   const isParticipantAboveTheWaitingList =
-    event.participants.findIndex(
+    participantsThatHaveNotCanceled.findIndex(
       (participant) => participant.id === selectedParticipant?.id
     ) < event.maxParticipants
 
@@ -81,6 +102,8 @@ const getEventDate = (
 
 export {
   getRandomAvatar,
+  getParticipantsThatHaveNotCanceled,
+  getParticipantsAboveTheWaitingList,
   hasEventReachedMaxParticipants,
   isParticipantOnWaitingList,
   getEventDate,
