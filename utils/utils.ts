@@ -73,7 +73,7 @@ const hasEventReachedMaxParticipants = (event: EventWithParticipants) => {
     event.participants
   )
 
-  participantsThatHaveNotCanceled.length >= event.maxParticipants
+  return participantsThatHaveNotCanceled.length >= event.maxParticipants
 }
 
 const isParticipantOnWaitingList = (
