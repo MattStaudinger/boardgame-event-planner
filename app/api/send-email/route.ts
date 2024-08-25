@@ -43,7 +43,8 @@ const sendEmail = async (event: Event) => {
     )
   })
 
-  return await Promise.allSettled(participantsEmailPromises)
+  await Promise.allSettled(participantsEmailPromises)
+  return NextResponse.json({ data: { message: `Success` } })
 }
 
 export const GET = async () => {
@@ -73,18 +74,20 @@ export const GET = async () => {
           .tz("Europe/Berlin")
           .diff(currentDate, "day") === 1
       ) {
-        sendEmail(nextNextEvent)
-        return NextResponse.json({ data: { message: `Success` } })
+        const response = await sendEmail(nextNextEvent)
+        return response
       }
 
       return NextResponse.json(
-        { message: "Next event today, but no tomorrow" },
+        {
+          message:
+            "Next event less than a day away, but next event after not exactly 1 day away",
+        },
         { status: 422 }
       )
     }
-    await sendEmail(nextEvent)
-
-    return NextResponse.json({ data: { message: `Success` } })
+    const response = await sendEmail(nextEvent)
+    return response
   } catch (error) {
     return NextResponse.json(
       { message: `Internal Server Error ${error}` },
