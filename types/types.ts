@@ -4,11 +4,11 @@ type EventWithParticipants = Event & { participants: Participant[] }
 
 type CreateParticipantBody = Omit<
   Participant,
-  "id" | "createdAt" | "updatedAt" | "hasCanceled"
+  "id" | "createdAt" | "updatedAt" | "canceled"
 >
 type UpdateParticipantBody = Omit<
   Participant,
-  "createdAt" | "updatedAt" | "hasCanceled"
+  "createdAt" | "updatedAt" | "canceled"
 >
 
 export type {

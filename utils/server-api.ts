@@ -15,6 +15,7 @@ const getFutureEvents = async () => {
   try {
     const res = await prisma.event.findMany({
       where: {
+        canceled: false, // Only include events that have not been canceled
         date: {
           gte: today,
         },
@@ -38,7 +39,7 @@ const getEvent = (id: string) => {
     include: {
       participants: {
         where: {
-          hasCanceled: false, // Only include participants who have not canceled
+          canceled: false, // Only include participants who have not canceled
         },
         orderBy: {
           createdAt: "asc", // Use 'desc' for descending order
@@ -75,7 +76,7 @@ const deleteParticipant = (participant: Participant) => {
     where: {
       id: participant.id,
     },
-    data: { ...participant, hasCanceled: true },
+    data: { ...participant, canceled: true },
   })
 }
 
