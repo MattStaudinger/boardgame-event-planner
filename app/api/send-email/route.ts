@@ -10,7 +10,6 @@ import {
   getFutureEvents,
   getEvent,
 } from "../../../utils/server-api"
-import { EventWithParticipants } from "../../../types/types"
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -44,7 +43,7 @@ const sendEmail = async (event: Event) => {
     )
   })
 
-  await Promise.allSettled(participantsEmailPromises)
+  return await Promise.allSettled(participantsEmailPromises)
 }
 
 export const GET = async () => {
@@ -83,7 +82,7 @@ export const GET = async () => {
         { status: 422 }
       )
     }
-    sendEmail(nextEvent)
+    await sendEmail(nextEvent)
 
     return NextResponse.json({ data: { message: `Success` } })
   } catch (error) {
