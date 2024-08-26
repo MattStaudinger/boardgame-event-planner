@@ -6,6 +6,7 @@ import NavBackButton from "../../components/NavBackButton"
 import EventEmptyState from "./components/EmptyState"
 import { hasEventReachedMaxParticipants, getEventDate } from "../../utils/utils"
 import { EventWithParticipants } from "../../types/types"
+import { getParticipantsAboveTheWaitingList } from "../../utils/utils"
 
 type EventProps = {
   params: {
@@ -79,15 +80,16 @@ export default async function Event({ params }: EventProps) {
         </h2>
 
         <ul className="divide-y divide-gray-100 w-full">
-          {event.participants
-            ?.slice(0, event.maxParticipants)
-            .map((participant) => (
-              <ParticipantItem
-                key={participant.id}
-                participant={participant}
-                event={event}
-              />
-            ))}
+          {getParticipantsAboveTheWaitingList(
+            event.participants,
+            event.maxParticipants
+          ).map((participant) => (
+            <ParticipantItem
+              key={participant.id}
+              participant={participant}
+              event={event}
+            />
+          ))}
         </ul>
 
         {event.participants.length > event.maxParticipants && (

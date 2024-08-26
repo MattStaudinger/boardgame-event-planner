@@ -63,8 +63,9 @@ const getParticipantsAboveTheWaitingList = (
   participants: Participant[],
   maxParticipants: number
 ) => {
-  return getParticipantsThatHaveNotCanceled(participants).filter(
-    (participant, index) => index < maxParticipants
+  return getParticipantsThatHaveNotCanceled(participants).slice(
+    0,
+    maxParticipants
   )
 }
 

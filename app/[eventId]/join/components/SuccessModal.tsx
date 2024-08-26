@@ -64,14 +64,14 @@ export default function SuccessModal({
             <p className="text-sm/6 text-black/50">
               {getSuccessMessage({ isOnWaitingList, isEdit })}
             </p>
-            {!isEdit && (
+            {!isEdit && !isOnWaitingList && (
               <p className="text-sm/6 text-black/50">
                 {
-                  "🏠 The address will be decided on some days prior the event and posted on the event page. You'll also receive a reminder with the address a day before the event."
+                  "🏠 The address will be decided on some days prior the event and posted on the event page. You'll also receive a reminder along with the address a day before the event."
                 }
               </p>
             )}
-            {!isEdit && (
+            {!isEdit && !isOnWaitingList && (
               <p className="text-sm/6 text-black/50">
                 {getDinnerPlanMessage()}
               </p>

@@ -3,7 +3,7 @@ import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import timezone from "dayjs/plugin/timezone"
 import SMTPTransport from "nodemailer/lib/smtp-transport"
-import type { Event, Participant } from "@prisma/client"
+import type { Event } from "@prisma/client"
 import { getParticipantsAboveTheWaitingList } from "../../../utils/utils"
 
 import {

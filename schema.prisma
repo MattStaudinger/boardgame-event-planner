@@ -31,3 +31,11 @@ model Participant {
     event     Event    @relation(fields: [eventId], references: [id])
     canceled  Boolean  @default(false)
 }
+
+model SentEmails {
+    id        String   @id @default(cuid())
+    name      String
+    email     String
+    eventDate String
+    sentAt    DateTime @default(now())
+}
