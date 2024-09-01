@@ -1,6 +1,8 @@
 # boardgame-event-planner
 
-An app to let people join boardgame night events.
+An app to let friends join boardgame night events.
+
+The final app can be visited at https://www.boardgamenight.de/
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
