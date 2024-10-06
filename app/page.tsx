@@ -6,6 +6,10 @@ import Image from "next/image"
 import { getFutureEvents } from "../utils/server-api"
 import TextBox from "../components/TextBox"
 
+export const dynamic = "force-dynamic"
+export const fetchCache = "force-no-store"
+export const revalidate = 0
+
 export default async function Home() {
   dayjs.locale("en")
 
