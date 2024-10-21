@@ -24,24 +24,30 @@ export const GET = async () => {
     if (isSmallEvent) {
       // next date is on a friday 2 weeks after the last event
       const nextDateDay = dayjs(lastEvent.date).add(14, "day").day(5)
-      nextDate = nextDateDay
-        .utc()
-        .hour(16)
+
+      // first get the date in Berlin timezone to have this hardcoded even when the daylight saving time changes
+      const eventDateBerlin = dayjs
+        .tz(nextDateDay, "Europe/Berlin")
+        .hour(18)
         .minute(30)
         .second(0)
         .millisecond(0)
-        .toDate()
+
+      nextDate = eventDateBerlin.utc().toDate()
       nextMaxParticipants = 8
     } else {
       // next date is on a monday 2 weeks after the last event
       const nextDateDay = dayjs(lastEvent.date).add(14, "day").day(1)
-      nextDate = nextDateDay
-        .utc()
-        .hour(16)
+
+      // first get the date in Berlin timezone to have this hardcoded even when the daylight saving time changes
+      const eventDateBerlin = dayjs
+        .tz(nextDateDay, "Europe/Berlin")
+        .hour(18)
         .minute(30)
         .second(0)
         .millisecond(0)
-        .toDate()
+      nextDate = eventDateBerlin.utc().toDate()
+
       nextMaxParticipants = 4
     }
     await createEvent(nextDate, nextMaxParticipants)
