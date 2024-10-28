@@ -19,6 +19,7 @@
     "add-to-calendar-button-react": "^2.6.18",
     "classnames": "^2.5.1",
     "dayjs": "^1.11.12",
+    "mailersend": "^2.3.0",
     "next": "14.2.5",
     "nodemailer": "^6.9.14",
     "react": "^18",

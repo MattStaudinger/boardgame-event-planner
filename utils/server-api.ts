@@ -9,6 +9,9 @@ import {
   UpdateParticipantBody,
 } from "../types/types"
 import type { Participant, Event } from "@prisma/client"
+import { MailerSend, EmailParams, Sender, Recipient } from "mailersend"
+
+const ADMIN_EMAIL = "info@boardgamenight.de"
 
 const getFutureEvents = async () => {
   const today = dayjs().format()
@@ -137,34 +140,48 @@ const sendEmail = async ({
   html,
   participant,
   event,
+  templateId,
+  templateVariables,
 }: {
   to: string
   subject: string
-  text: string
-  html: string
-  participant: Participant
-  event: Event
+  text?: string
+  html?: string
+  templateId?: string
+  participant?: Participant
+  event?: Event
+  templateVariables?: Record<string, string>
 }) => {
-  const transporter = nodemailer.createTransport({
-    host: "mail.gmx.net",
-    port: 587,
-    secure: false, // Use `true` for port 465, `false` for all other ports
-    auth: {
-      user: process.env.EMAIL_ACCOUNT,
-      pass: process.env.EMAIL_ACCOUNT_PASSWORD,
-    },
+  const mailerSend = new MailerSend({
+    apiKey: process.env.MAILERSEND_API_KEY || "",
   })
 
-  const mailOptions = {
-    from: "Boardgame night <boardgamenight@gmx.net>",
-    to,
-    subject,
-    text,
-    html,
+  const sentFrom = new Sender(ADMIN_EMAIL, "Boardgame night")
+
+  const recipients = [new Recipient(to)]
+
+  const emailParams = new EmailParams()
+    .setFrom(sentFrom)
+    .setTo(recipients)
+    .setReplyTo(sentFrom)
+    .setSubject(subject)
+
+  if (templateId) {
+    emailParams.setTemplateId(templateId).setPersonalization([
+      {
+        email: to,
+        data: templateVariables || {},
+      },
+    ])
+  } else {
+    emailParams.setHtml(html || "").setText(text || "")
   }
 
-  await createNewEmailEntry({ participant, event })
-  return transporter.sendMail(mailOptions)
+  if (participant && event) {
+    await createNewEmailEntry({ participant, event })
+  }
+
+  return mailerSend.email.send(emailParams)
 }
 
 const sendEmailMoveFromWaitingListToEvent = async (
@@ -211,23 +228,44 @@ const sendEmailReminderBeforeEvent = async ({
 
   const mailOptions = {
     to: participant.email,
-    subject: `Reminder for upcoming boardgame night tomorrow on ${getEventDate(
+    subject: `Reminder for upcoming boardgame night on ${getEventDate(
       event.date
     )}`,
-    text: `Hey ${participant.name},\n\nJust a quick reminder that tomorrow, ${eventDate} is the night of your dreams - boardgame night. ${addressMessage} If you can't make it, please go to the event page (${eventUrl}) and cancel your spot.\n\nWe will eat dinner together - either ordering or preparing, so no need to eat up front.\n\nSee you soon! 🙌 \n\nIf you didn't want this email or don't know where you got it from, please reach out to boardgamenight@gmx.net.`,
-    html: `
-    <p>Hey ${participant.name}</p>
-    <p>Just a quick reminder that tomorrow, ${eventDate} is the night of your dreams - boardgame night.</p>
-    <p>${addressMessage} If you can't make it, please go to <a href="${eventUrl}">the event page</a> and cancel your spot.</p>
-    <p>We will eat dinner together - either ordering or preparing, so no need to eat up front.</p>
-    <p>See you soon! 🙌</p>
-    <div style="margin-top: 20px; font-size: 12px; color: #555;">
-    If you didn't want this email or don't know where you got it from, please reach out to <a href="mailto:boardgamenight@gmx.net">boardgamenight@gmx.net</a>.
-    </div>
-    `,
+    templateId: "0r83ql3krnp4zw1j",
+    templateVariables: {
+      name: participant.name,
+      eventDate,
+      eventUrl,
+      addressMessage,
+    },
   }
 
   return await sendEmail({ ...mailOptions, event, participant })
+}
+const sendEmailToAdminWhenNewParticipant = async ({
+  participantName,
+  eventId,
+}: {
+  participantName: string
+  eventId: string
+}) => {
+  const event = await getEvent(eventId)
+  if (!event) {
+    return
+  }
+
+  const mailOptions = {
+    to: ADMIN_EMAIL,
+    subject: `New participant for event on ${getEventDate(event.date)}`,
+    templateId: "ynrw7gykk1242k8e",
+    templateVariables: {
+      name: participantName,
+      eventDate: getEventDate(event?.date, "dddd, DD.MM.YYYY [at] HH:mm"),
+      eventUrl: `${process.env.BASE_URL}/${eventId}`,
+    },
+  }
+
+  return await sendEmail({ ...mailOptions })
 }
 
 const createEvent = async (date: Date, maxParticipants: number) => {
@@ -251,4 +289,5 @@ export {
   createEvent,
   sendEmailReminderBeforeEvent,
   getEvent,
+  sendEmailToAdminWhenNewParticipant,
 }

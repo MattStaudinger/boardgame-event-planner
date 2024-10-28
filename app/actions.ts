@@ -15,6 +15,7 @@ import {
   createParticipant,
   updateParticipant as updateParticipantInDB,
   deleteParticipantAndSendEmailToNextInWaitingList as deleteParticipantInDB,
+  sendEmailToAdminWhenNewParticipant,
 } from "../utils/server-api"
 import { rateLimit } from "../utils/rateLimit"
 
@@ -80,7 +81,10 @@ export async function createNewParticipant(
   try {
     // create participant
     await createParticipant(body)
-
+    await sendEmailToAdminWhenNewParticipant({
+      participantName: validatedData.data.name,
+      eventId: validatedData.data.eventId,
+    })
     // When nextJs gets updated, we will call in the future revalidatePath(`/${body.eventId}`) - currently,
     // revalidatePath invalidates all the routes in the client-side Router Cache and hence wouldn't
     // trigger the success modal. NextJS docs state, that this behavior is temporary and will be updated in the future to

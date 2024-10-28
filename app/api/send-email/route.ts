@@ -33,7 +33,7 @@ const sendEmail = async (event: Event) => {
       { status: 422 }
     )
   }
-  let participantsEmailPromises: Promise<SMTPTransport.SentMessageInfo>[] = []
+  let participantsEmailPromises: Promise<{}>[] = []
 
   const participantsAboveTheWaitingList = getParticipantsAboveTheWaitingList(
     eventWithParticipants.participants,
@@ -50,12 +50,22 @@ const sendEmail = async (event: Event) => {
     )
   })
 
-  await Promise.allSettled(participantsEmailPromises)
+  try {
+    await Promise.all(participantsEmailPromises)
+  } catch (error) {
+    return NextResponse.json(
+      // @ts-ignore
+      { error: `Internal Server Error - ${error?.body?.message}` },
+      { status: 500 }
+    )
+  }
+
   return NextResponse.json({ data: { message: `Success` } })
 }
 
 export const GET = async () => {
   try {
+    const DAYS_DIFF_BEFORE_EVENT = 2 // 3 days before the event
     const events = await getFutureEvents()
 
     if (events.length === 0) {
@@ -66,33 +76,21 @@ export const GET = async () => {
     const currentDate = dayjs().tz("Europe/Berlin")
     const nextEventDate = dayjs(nextEvent.date).tz("Europe/Berlin")
 
-    if (nextEventDate.diff(currentDate, "day") > 1) {
+    if (nextEventDate.diff(currentDate, "day") > DAYS_DIFF_BEFORE_EVENT) {
       return NextResponse.json(
         { message: "Next event too far in the future" },
         { status: 422 }
       )
     }
-    if (nextEventDate.diff(currentDate, "day") < 1) {
-      // if the next event is today, check the event date after that one and send an email
-      // to the participants of the next event if that event is in a day from now
-      const nextNextEvent = events[1]
-      if (
-        dayjs(nextNextEvent.date)
-          .tz("Europe/Berlin")
-          .diff(currentDate, "day") === 1
-      ) {
-        const response = await sendEmail(nextNextEvent)
-        return response
-      }
-
+    if (nextEventDate.diff(currentDate, "day") < DAYS_DIFF_BEFORE_EVENT) {
       return NextResponse.json(
         {
-          message:
-            "Next event less than a day away, but next event after not exactly 1 day away",
+          message: `Next event less than ${DAYS_DIFF_BEFORE_EVENT} days away, reminder was already sent`,
         },
         { status: 422 }
       )
     }
+
     const response = await sendEmail(nextEvent)
     return response
   } catch (error) {
