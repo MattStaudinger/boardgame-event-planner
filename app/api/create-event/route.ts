@@ -4,7 +4,11 @@ import utc from "dayjs/plugin/utc"
 
 dayjs.extend(utc)
 
-import { getFutureEvents, createEvent } from "../../../utils/server-api"
+import {
+  getFutureEvents,
+  createEvent,
+  sendEmailToAdminWhenNewEventCreated,
+} from "../../../utils/server-api"
 
 export const dynamic = "force-dynamic" // static by default, unless reading the request
 
@@ -50,7 +54,8 @@ export const GET = async () => {
 
       nextMaxParticipants = 4
     }
-    await createEvent(nextDate, nextMaxParticipants)
+    const event = await createEvent(nextDate, nextMaxParticipants)
+    await sendEmailToAdminWhenNewEventCreated({ event })
 
     return NextResponse.json({ message: `Success` })
   } catch (error) {

@@ -2,7 +2,6 @@ import { NextResponse } from "next/server"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import timezone from "dayjs/plugin/timezone"
-import SMTPTransport from "nodemailer/lib/smtp-transport"
 import type { Event } from "@prisma/client"
 import { getParticipantsAboveTheWaitingList } from "../../../utils/utils"
 
@@ -65,7 +64,7 @@ const sendEmail = async (event: Event) => {
 
 export const GET = async () => {
   try {
-    const DAYS_DIFF_BEFORE_EVENT = 2 // 3 days before the event
+    const DAYS_DIFF_BEFORE_EVENT = 3 // 3 days before the event
     const events = await getFutureEvents()
 
     if (events.length === 0) {

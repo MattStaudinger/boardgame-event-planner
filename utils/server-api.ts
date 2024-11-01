@@ -257,11 +257,28 @@ const sendEmailToAdminWhenNewParticipant = async ({
   const mailOptions = {
     to: ADMIN_EMAIL,
     subject: `New participant for event on ${getEventDate(event.date)}`,
-    templateId: "ynrw7gykk1242k8e",
+    templateId: "x2p03472mk3lzdrn",
     templateVariables: {
       name: participantName,
       eventDate: getEventDate(event?.date, "dddd, DD.MM.YYYY [at] HH:mm"),
       eventUrl: `${process.env.BASE_URL}/${eventId}`,
+    },
+  }
+
+  return await sendEmail({ ...mailOptions })
+}
+const sendEmailToAdminWhenNewEventCreated = async ({
+  event,
+}: {
+  event: Event
+}) => {
+  const mailOptions = {
+    to: ADMIN_EMAIL,
+    subject: `New boardgame-night event on ${getEventDate(event.date)}`,
+    templateId: "ynrw7gykk1242k8e",
+    templateVariables: {
+      eventDate: getEventDate(event?.date, "dddd, DD.MM.YYYY [at] HH:mm"),
+      eventUrl: `${process.env.BASE_URL}/${event.id}`,
     },
   }
 
@@ -290,4 +307,5 @@ export {
   sendEmailReminderBeforeEvent,
   getEvent,
   sendEmailToAdminWhenNewParticipant,
+  sendEmailToAdminWhenNewEventCreated,
 }
